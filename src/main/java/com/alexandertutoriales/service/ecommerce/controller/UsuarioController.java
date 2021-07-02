@@ -25,7 +25,7 @@ public class UsuarioController {
         String contrasenia = request.getParameter("pass");
         return this.service.login(email, contrasenia);
     }
-    @PostMapping()
+    @PostMapping
     public GenericResponse save(@RequestBody Usuario u) {
         return this.service.guardarUsuario(u);
     }
