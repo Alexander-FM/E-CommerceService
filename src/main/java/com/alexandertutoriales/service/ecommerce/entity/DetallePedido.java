@@ -13,10 +13,10 @@ public class DetallePedido {
     private int cantidad;
     @Column
     private Double precio;
-    @OneToOne
-    private Platillo platillo;
-    @OneToOne
-    private Pedido pedido;
+    @ManyToOne
+    private Platillo platillo;//Muchos platillos pueden estar en un detallePedido (Hace referencia a la clase actual).
+    @ManyToOne
+    private Pedido pedido;//Muchos Detalles pueden estar en un pedido
 
     public int getId() {
         return id;

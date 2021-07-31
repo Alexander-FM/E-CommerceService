@@ -12,7 +12,7 @@ public class Pedido {
     @Column
     @JsonFormat(pattern = "dd-MM-yyyy", timezone = "America/Lima")
     private Date fechaCompra;
-    @OneToOne
+    @ManyToOne//Muchos Registros de Pedido puede contener un solo cliente
     private Cliente cliente;
     @Column
     private Double monto;
