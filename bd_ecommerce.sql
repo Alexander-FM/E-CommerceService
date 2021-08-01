@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 03-07-2021 a las 05:12:35
+-- Tiempo de generación: 01-08-2021 a las 05:53:27
 -- Versión del servidor: 10.4.18-MariaDB
 -- Versión de PHP: 8.0.3
 
@@ -71,7 +71,8 @@ CREATE TABLE `cliente` (
 INSERT INTO `cliente` (`id`, `departamento`, `direccion_envio`, `distrito`, `nombres`, `num_doc`, `provincia`, `tipo_doc`, `foto_id`, `apellido_materno`, `apellido_paterno`, `telefono`) VALUES
 (1, 'Lambayeque', 'Urb. Villa los sauces mz.v lt.5', 'Chiclayo', 'Oscar Antonio', '73139193', 'Chiclayo', 'DNI', 2, 'Veintimilla', 'Cumpa', '963258753'),
 (2, 'Lambayeque', 'Calle sucre 903', 'Ferreñafe', 'Alexander', '78019778', 'Ferreñafe', 'DNI', 1, 'Medina', 'Fuentes', '917967148'),
-(5, 'Lambayeque', 'Calle Nicanor Carmona N° 256', 'Ferreñafe', 'Ximena', '45896325', 'Ferreñafe', 'DNI', 9, 'Samamé', 'Quezada', '987456321');
+(5, 'Lambayeque', 'Calle Nicanor Carmona N° 256', 'Ferreñafe', 'Ximena', '45896325', 'Ferreñafe', 'DNI', 9, 'Samamé', 'Quezada', '987456321'),
+(6, 'Lambayeque', 'Calle Sucre 903', 'Ferreñafe', 'Jorge Luis', '56987412', 'Ferreñafe', 'DNI', 11, 'Medina', 'Fuentes', '987596321');
 
 -- --------------------------------------------------------
 
@@ -86,6 +87,25 @@ CREATE TABLE `detalle_pedido` (
   `pedido_id` int(11) DEFAULT NULL,
   `platillo_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `detalle_pedido`
+--
+
+INSERT INTO `detalle_pedido` (`id`, `cantidad`, `precio`, `pedido_id`, `platillo_id`) VALUES
+(1, 2, 10, 1, 4),
+(2, 3, 30, 1, 3),
+(3, 1, 10, 2, 2),
+(4, 1, 15.5, 2, 1),
+(5, 2, 10, 3, 4),
+(6, 2, 10, 4, 2),
+(7, 2, 30, 4, 3),
+(8, 2, 10, 5, 2),
+(9, 2, 30, 5, 3),
+(10, 1, 10, 6, 4),
+(11, 1, 30, 6, 3),
+(12, 1, 30, 7, 3),
+(13, 1, 10, 7, 4);
 
 -- --------------------------------------------------------
 
@@ -116,7 +136,8 @@ INSERT INTO `documento_almacenado` (`id`, `eliminado`, `estado`, `extension`, `f
 (7, b'0', 'A', '.png', '37bf3d83-8550-4b8e-a710-076d9907be98', 'Arroz'),
 (8, b'0', 'A', '.png', 'df453f5a-8587-4759-b51f-7ef6152059bc', 'Arroz Chaufa'),
 (9, b'0', 'A', '.jpg', 'd7b80d86-a12c-4a7d-8a54-f3792ce16446', 'profilePh28202111144'),
-(10, b'0', 'A', '.jpg', 'a085d757-07d4-43f1-a18d-df86d99622d3', 'Postres');
+(10, b'0', 'A', '.jpg', 'a085d757-07d4-43f1-a18d-df86d99622d3', 'Postres'),
+(11, b'0', 'A', '.jpg', 'a8d4d9ba-63cc-406d-a3d7-d3aef4d7a259', 'profilePh158202114181');
 
 -- --------------------------------------------------------
 
@@ -131,6 +152,19 @@ CREATE TABLE `pedido` (
   `monto` double DEFAULT NULL,
   `cliente_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `pedido`
+--
+
+INSERT INTO `pedido` (`id`, `anular_pedido`, `fecha_compra`, `monto`, `cliente_id`) VALUES
+(1, b'0', '2021-07-05 11:42:18', 110, 2),
+(2, b'0', '2021-07-08 23:35:07', 25.5, 2),
+(3, b'0', '2021-07-30 15:00:54', 20, 5),
+(4, b'0', '2021-07-30 15:31:59', 80, 5),
+(5, b'0', '2021-07-30 22:15:24', 80, 2),
+(6, b'0', '2021-07-31 20:51:52', 40, 2),
+(7, b'0', '2021-07-31 21:10:22', 40, 1);
 
 -- --------------------------------------------------------
 
@@ -158,7 +192,7 @@ INSERT INTO `platillo` (`id`, `descripcion_platillo`, `nombre`, `precio`, `stock
 (1, 'El mejor plato del norte a tu casa', 'Arroz con Pollo', 15.5, 20, b'1', 2, 3, b'1'),
 (2, 'Tallarines rojos con unos ricos hongos y laurel que le da el toque de casa', 'Tallarines Rojos', 10, 20, b'1', 1, 6, b'0'),
 (3, 'No existe información del producto', 'Tallarines Verdes', 30, 20, b'1', 1, 5, b'1'),
-(4, 'No existe información del Producto', 'Arroz Chaufa', 10, 50, b'1', 2, 8, b'1');
+(4, 'No existe información del Producto', 'Arroz Chaufa', 10, 49, b'1', 2, 8, b'1');
 
 -- --------------------------------------------------------
 
@@ -181,7 +215,8 @@ CREATE TABLE `usuario` (
 INSERT INTO `usuario` (`id`, `clave`, `email`, `vigencia`, `cliente_id`) VALUES
 (1, 'admin123', 'oantonio@gmail.com', b'1', 1),
 (2, 'xime123', 'ximena@live.com', b'1', 5),
-(3, '123', 'alexanderfuentes1912@gmail.com', b'1', 2);
+(3, '123', 'alexanderfuentes1912@gmail.com', b'1', 2),
+(4, 'jorge123', 'jorgeluisfuentesmedina@gmail.com', b'1', 6);
 
 --
 -- Índices para tablas volcadas
@@ -251,25 +286,25 @@ ALTER TABLE `categoria`
 -- AUTO_INCREMENT de la tabla `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_pedido`
 --
 ALTER TABLE `detalle_pedido`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `documento_almacenado`
 --
 ALTER TABLE `documento_almacenado`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `platillo`
@@ -281,7 +316,7 @@ ALTER TABLE `platillo`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
