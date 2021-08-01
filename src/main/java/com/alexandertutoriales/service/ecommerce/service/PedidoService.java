@@ -6,6 +6,7 @@ import com.alexandertutoriales.service.ecommerce.entity.dto.GenerarPedidoDTO;
 import com.alexandertutoriales.service.ecommerce.entity.dto.PedidoConDetallesDTO;
 import com.alexandertutoriales.service.ecommerce.repository.DetallePedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PedidoRepository;
+import com.alexandertutoriales.service.ecommerce.repository.PlatilloRepository;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,13 @@ public class PedidoService {
     private final PedidoRepository repository;
     private final DetallePedidoRepository detallePedidoRepository;
     private final DetallePedidoService dpService;
+    private final PlatilloRepository pRepository;
 
-    public PedidoService(PedidoRepository repository, DetallePedidoRepository detallePedidoRepository, DetallePedidoService dpService) {
+    public PedidoService(PedidoRepository repository, DetallePedidoRepository detallePedidoRepository, DetallePedidoService dpService, PlatilloRepository pRepository) {
         this.repository = repository;
         this.detallePedidoRepository = detallePedidoRepository;
         this.dpService = dpService;
+        this.pRepository = pRepository;
     }
 
     //Método para devolver los pedidos con detalles
@@ -47,11 +50,13 @@ public class PedidoService {
         this.repository.save(dto.getPedido());
         for (DetallePedido dp : dto.getDetallePedido()) {
             dp.setPedido(dto.getPedido());
+            this.pRepository.actualizarStock(dp.getCantidad(), dp.getPlatillo().getId());
         }
         //Llamamos al servicio de Detalle Venta para guardar los respectivos detalles del pedido.
         this.dpService.guardarDetalles(dto.getDetallePedido());
         return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
     }
+
     //Otra manera de hacer el guardarPedido con la instancia de la clase pedido
     public GenericResponse guardarPedido2(GenerarPedidoDTO dto) {
         Date date = new Date();

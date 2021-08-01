@@ -49,8 +49,8 @@ public class DocumentoAlmacenadoService {
 
         obj.setFileName(fileName);
         obj.setExtension(extension);
-
         return new GenericResponse(TIPO_DATA, RPTA_OK,OPERACION_CORRECTA,repo.save(obj));
+
     }
 
     public ResponseEntity<Resource> download(String completefileName, HttpServletRequest request) {
