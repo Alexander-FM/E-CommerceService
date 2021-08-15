@@ -82,7 +82,6 @@ public class PedidoService {
             this.restablecerStock(id);
             this.repository.save(p);
             return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, p);
-
         } else {
             return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA,
                     "El pedido que desea anular no es válido");
