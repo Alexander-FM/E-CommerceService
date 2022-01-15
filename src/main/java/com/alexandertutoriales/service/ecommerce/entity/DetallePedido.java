@@ -57,4 +57,12 @@ public class DetallePedido {
     public void setPlatillo(Platillo platillo) {
         this.platillo = platillo;
     }
+
+    public String getNombre() {
+        return this.platillo!= null ? this.platillo.getNombre() : "---";
+    }
+    public Double getSubTotal(){
+        return this.cantidad * this.precio;
+    }
+
 }

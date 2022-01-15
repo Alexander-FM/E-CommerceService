@@ -8,9 +8,24 @@ import com.alexandertutoriales.service.ecommerce.repository.DetallePedidoReposit
 import com.alexandertutoriales.service.ecommerce.repository.PedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PlatilloRepository;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.core.io.Resource;
+import org.springframework.util.ResourceUtils;
 
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static com.alexandertutoriales.service.ecommerce.utils.Global.*;
@@ -93,5 +108,41 @@ public class PedidoService {
         for (DetallePedido dp : detalles) {
             pRepository.aumentarStock(dp.getCantidad(), dp.getPlatillo().getId());
         }
+    }
+
+    @NotNull
+    public ResponseEntity<Resource> exportInvoice(int idCli, int idOrden) throws JRException {
+        Pedido pedido = this.repository.findByIdAndClienteId(idCli, idOrden);
+        if (pedido != null) {
+            try {
+                final File file = ResourceUtils.getFile("classpath:exportInvoice.jasper");
+                final File imgPNP = ResourceUtils.getFile("classpath:images/logo_negocio.png");
+                final JasperReport report = (JasperReport) JRLoader.loadObject(file);
+
+                final HashMap<String, Object> parameters = new HashMap<>();
+                parameters.put("nombreCliente", pedido.getCliente().getNombreCompletoCliente());
+                parameters.put("imgLogo", imgPNP);
+                parameters.put("dsInvoice", new JRBeanCollectionDataSource((Collection<?>) this.detallePedidoRepository.findByPedido(idOrden)));
+                JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
+                byte[] reporte = JasperExportManager.exportReportToPdf(jasperPrint);
+                String sdf = (new SimpleDateFormat("dd/MM/yyyy")).format(new Date());
+                StringBuilder var1 = new StringBuilder().append("invoicePDF:");
+                ContentDisposition contentDisposition = ContentDisposition.builder("attachment")
+                        .filename(var1.append(pedido.getId())
+                                .append("generatedate:")
+                                .append(sdf).append(".pdf")
+                                .toString()).build();
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentDisposition(contentDisposition);
+                return ResponseEntity.ok().contentLength((long)reporte.length)
+                        .contentType(MediaType.APPLICATION_PDF)
+                        .headers(headers).body(new ByteArrayResource(reporte));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        } else {
+            return ResponseEntity.noContent().build();//No se encontro el contenido
+        }
+        return null;
     }
 }

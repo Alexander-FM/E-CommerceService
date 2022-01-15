@@ -5,8 +5,12 @@ import com.alexandertutoriales.service.ecommerce.entity.dto.GenerarPedidoDTO;
 import com.alexandertutoriales.service.ecommerce.entity.dto.PedidoConDetallesDTO;
 import com.alexandertutoriales.service.ecommerce.service.PedidoService;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
+import net.sf.jasperreports.engine.JRException;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -33,4 +37,10 @@ public class PedidoController {
     public GenericResponse anular(@PathVariable int id){
         return this.service.anular(id);
     }
+    //EXPORTAR PDF DE ORDEN
+    @GetMapping("/exportInvoice")
+    public ResponseEntity<Resource> exportInvoice(@RequestParam int idCli, @RequestParam int idOrden) throws JRException {
+        return this.service.exportInvoice(idCli, idOrden);
+    }
+
 }

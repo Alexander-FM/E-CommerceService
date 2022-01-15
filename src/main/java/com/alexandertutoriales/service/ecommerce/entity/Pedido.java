@@ -58,4 +58,5 @@ public class Pedido {
     public void setAnularPedido(boolean anularPedido) {
         this.anularPedido = anularPedido;
     }
+
 }
