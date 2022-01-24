@@ -22,9 +22,12 @@ import org.springframework.util.ResourceUtils;
 
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
+import javax.xml.transform.Result;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -111,18 +114,27 @@ public class PedidoService {
     }
 
     @NotNull
-    public ResponseEntity<Resource> exportInvoice(int idCli, int idOrden) throws JRException {
-        Pedido pedido = this.repository.findByIdAndClienteId(idCli, idOrden);
-        if (pedido != null) {
+    public ResponseEntity<Resource> exportInvoice(int idCli, int idOrden) {
+        Optional<Pedido> optPedido = this.repository.findByIdAndClienteId(idCli, idOrden);
+        Double rpta = this.detallePedidoRepository.totalByIdCustomer(idCli);
+        if (optPedido.isPresent()) {
             try {
+                /*Double total = null;
+                if(rs.next()){
+                     total = rs.getDouble(1);
+                }*/
+                final Pedido pedido = optPedido.get();
                 final File file = ResourceUtils.getFile("classpath:exportInvoice.jasper");
-                final File imgPNP = ResourceUtils.getFile("classpath:images/logo_negocio.png");
+                final File imgLogo = ResourceUtils.getFile("classpath:images/logoCevicheria.png");
                 final JasperReport report = (JasperReport) JRLoader.loadObject(file);
 
                 final HashMap<String, Object> parameters = new HashMap<>();
                 parameters.put("nombreCliente", pedido.getCliente().getNombreCompletoCliente());
-                parameters.put("imgLogo", imgPNP);
+                parameters.put("imgLogo", new FileInputStream(imgLogo));
+                parameters.put("total", rpta);
                 parameters.put("dsInvoice", new JRBeanCollectionDataSource((Collection<?>) this.detallePedidoRepository.findByPedido(idOrden)));
+
+
                 JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
                 byte[] reporte = JasperExportManager.exportReportToPdf(jasperPrint);
                 String sdf = (new SimpleDateFormat("dd/MM/yyyy")).format(new Date());
@@ -137,7 +149,7 @@ public class PedidoService {
                 return ResponseEntity.ok().contentLength((long)reporte.length)
                         .contentType(MediaType.APPLICATION_PDF)
                         .headers(headers).body(new ByteArrayResource(reporte));
-            } catch (FileNotFoundException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {

@@ -39,7 +39,7 @@ public class PedidoController {
     }
     //EXPORTAR PDF DE ORDEN
     @GetMapping("/exportInvoice")
-    public ResponseEntity<Resource> exportInvoice(@RequestParam int idCli, @RequestParam int idOrden) throws JRException {
+    public ResponseEntity<Resource> exportInvoice(@RequestParam int idCli, @RequestParam int idOrden) {
         return this.service.exportInvoice(idCli, idOrden);
     }
 
