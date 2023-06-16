@@ -5,6 +5,8 @@ import javax.print.Doc;
 
 @Entity
 public class Categoria {
+    public static final String C_NOMBRE = "nombre";
+    public static final String C_VIGENCIA = "vigencia";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
