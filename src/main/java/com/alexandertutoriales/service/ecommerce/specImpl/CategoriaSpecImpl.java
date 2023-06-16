@@ -17,7 +17,7 @@ public class CategoriaSpecImpl extends AbstractSpec implements CategoriaSpec {
     return ((root, query, cb) -> {
       List<Predicate> conditions = new ArrayList<>();
       if (filter.getVerInactivos() == null || filter.getVerInactivos().equals("NO")) {
-        conditions.add(cb.equal(root.get(Categoria.C_VIGENCIA), 1));
+        conditions.add(cb.equal(root.get(Categoria.C_VIGENCIA),1));
       }
       return and(cb, conditions);
     });

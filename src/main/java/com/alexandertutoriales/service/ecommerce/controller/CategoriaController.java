@@ -1,6 +1,7 @@
 package com.alexandertutoriales.service.ecommerce.controller;
 
 import com.alexandertutoriales.service.ecommerce.entity.Categoria;
+import com.alexandertutoriales.service.ecommerce.entity.dto.CategoriaDto;
 import com.alexandertutoriales.service.ecommerce.entity.filters.CategoriaFilter;
 import com.alexandertutoriales.service.ecommerce.service.CategoriaService;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
@@ -26,7 +27,7 @@ public class CategoriaController {
         return this.service.listarCategoriasActivas();
     }
     @PostMapping("/filtrar")
-    public GenericResponse<Page<Categoria>> filtrar(Pageable pageRequest,
+    public GenericResponse<Page<CategoriaDto>> filtrar(Pageable pageRequest,
         @Valid @RequestBody(required = false) CategoriaFilter filter) {
         return this.service.findAll(pageRequest, filter);
     }
