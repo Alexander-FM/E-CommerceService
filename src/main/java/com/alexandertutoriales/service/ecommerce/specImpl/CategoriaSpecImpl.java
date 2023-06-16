@@ -19,6 +19,9 @@ public class CategoriaSpecImpl extends AbstractSpec implements CategoriaSpec {
       if (filter.getVerInactivos() == null || filter.getVerInactivos().equals("NO")) {
         conditions.add(cb.equal(root.get(Categoria.C_VIGENCIA),1));
       }
+      if (filter.getNombre() != null) {
+        conditions.add(like(cb, root.get(Categoria.C_NOMBRE), filter.getNombre()));
+      }
       return and(cb, conditions);
     });
   }
