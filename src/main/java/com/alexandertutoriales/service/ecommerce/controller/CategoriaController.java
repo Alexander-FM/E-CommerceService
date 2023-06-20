@@ -73,4 +73,16 @@ public class CategoriaController {
         this.service.deleteCategoriaById(categoriaId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/desactivar/{id}")
+    public ResponseEntity<Void> desactivar(@PathVariable(required = false) Integer id) {
+        this.service.desactivar(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/activar/{id}")
+    public ResponseEntity<Void> activar(@PathVariable(required = false) Integer id) {
+        this.service.activar(id);
+        return ResponseEntity.ok().build();
+    }
 }
