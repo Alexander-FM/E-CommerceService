@@ -9,19 +9,21 @@ public class Categoria {
     public static final String C_VIGENCIA = "vigencia";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     @Column(length = 100)
     private String nombre;
     @Column
     private boolean vigencia;
     @OneToOne
     private DocumentoAlmacenado foto;
+    @Transient
+    private String vigenciaString;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -47,5 +49,13 @@ public class Categoria {
 
     public void setFoto(DocumentoAlmacenado foto) {
         this.foto = foto;
+    }
+
+    public String getVigenciaString() {
+        return vigenciaString;
+    }
+
+    public void setVigenciaString(String vigenciaString) {
+        this.vigenciaString = vigenciaString;
     }
 }
