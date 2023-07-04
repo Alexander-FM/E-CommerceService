@@ -1,14 +1,11 @@
 package com.alexandertutoriales.service.ecommerce.entity.dto;
 
-import com.alexandertutoriales.service.ecommerce.entity.DocumentoAlmacenado;
-
 public class CategoriaDto {
   private Integer id;
   private String nombre;
   private boolean vigencia;
   private String vigenciaString;
-  //Consideramos como una excepción ya que haríamos diversos cambios aquí.
-  private DocumentoAlmacenado foto;
+  private DocumentoAlmacenadoDto foto;
 
   public Integer getId() {
     return id;
@@ -26,14 +23,6 @@ public class CategoriaDto {
     this.nombre = nombre;
   }
 
-  public DocumentoAlmacenado getFoto() {
-    return foto;
-  }
-
-  public void setFoto(DocumentoAlmacenado foto) {
-    this.foto = foto;
-  }
-
   public String getVigenciaString() {
     return vigenciaString;
   }
@@ -48,5 +37,13 @@ public class CategoriaDto {
 
   public void setVigencia(boolean vigencia) {
     this.vigencia = vigencia;
+  }
+
+  public DocumentoAlmacenadoDto getFoto() {
+    return foto;
+  }
+
+  public void setFoto(DocumentoAlmacenadoDto foto) {
+    this.foto = foto;
   }
 }
