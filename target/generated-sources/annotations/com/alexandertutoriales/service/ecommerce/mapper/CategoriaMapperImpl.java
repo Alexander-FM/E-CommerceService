@@ -1,7 +1,9 @@
 package com.alexandertutoriales.service.ecommerce.mapper;
 
 import com.alexandertutoriales.service.ecommerce.entity.Categoria;
+import com.alexandertutoriales.service.ecommerce.entity.DocumentoAlmacenado;
 import com.alexandertutoriales.service.ecommerce.entity.dto.CategoriaDto;
+import com.alexandertutoriales.service.ecommerce.entity.dto.DocumentoAlmacenadoDto;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-04T15:22:23-0500",
+    date = "2023-07-04T16:19:01-0500",
     comments = "version: 1.5.3.Final, compiler: javac, environment: Java 1.8.0_202 (Oracle Corporation)"
 )
 @Component
@@ -71,6 +73,7 @@ public class CategoriaMapperImpl implements CategoriaMapper {
         categoriaDto.setNombre( categoria.getNombre() );
         categoriaDto.setVigenciaString( categoria.getVigenciaString() );
         categoriaDto.setVigencia( categoria.isVigencia() );
+        categoriaDto.setFoto( documentoAlmacenadoToDocumentoAlmacenadoDto( categoria.getFoto() ) );
 
         return categoriaDto;
     }
@@ -86,8 +89,47 @@ public class CategoriaMapperImpl implements CategoriaMapper {
         categoria.setId( usuarioDto.getId() );
         categoria.setNombre( usuarioDto.getNombre() );
         categoria.setVigencia( usuarioDto.isVigencia() );
+        categoria.setFoto( documentoAlmacenadoDtoToDocumentoAlmacenado( usuarioDto.getFoto() ) );
         categoria.setVigenciaString( usuarioDto.getVigenciaString() );
 
         return categoria;
+    }
+
+    protected DocumentoAlmacenadoDto documentoAlmacenadoToDocumentoAlmacenadoDto(DocumentoAlmacenado documentoAlmacenado) {
+        if ( documentoAlmacenado == null ) {
+            return null;
+        }
+
+        DocumentoAlmacenadoDto documentoAlmacenadoDto = new DocumentoAlmacenadoDto();
+
+        documentoAlmacenadoDto.setId( documentoAlmacenado.getId() );
+        documentoAlmacenadoDto.setNombre( documentoAlmacenado.getNombre() );
+        documentoAlmacenadoDto.setFileName( documentoAlmacenado.getFileName() );
+        documentoAlmacenadoDto.setExtension( documentoAlmacenado.getExtension() );
+        documentoAlmacenadoDto.setEstado( documentoAlmacenado.getEstado() );
+        documentoAlmacenadoDto.setEliminado( documentoAlmacenado.isEliminado() );
+        documentoAlmacenadoDto.setFile( documentoAlmacenado.getFile() );
+        documentoAlmacenadoDto.setUrlFile( documentoAlmacenado.getUrlFile() );
+
+        return documentoAlmacenadoDto;
+    }
+
+    protected DocumentoAlmacenado documentoAlmacenadoDtoToDocumentoAlmacenado(DocumentoAlmacenadoDto documentoAlmacenadoDto) {
+        if ( documentoAlmacenadoDto == null ) {
+            return null;
+        }
+
+        DocumentoAlmacenado documentoAlmacenado = new DocumentoAlmacenado();
+
+        documentoAlmacenado.setId( documentoAlmacenadoDto.getId() );
+        documentoAlmacenado.setNombre( documentoAlmacenadoDto.getNombre() );
+        documentoAlmacenado.setFileName( documentoAlmacenadoDto.getFileName() );
+        documentoAlmacenado.setExtension( documentoAlmacenadoDto.getExtension() );
+        documentoAlmacenado.setEstado( documentoAlmacenadoDto.getEstado() );
+        documentoAlmacenado.setEliminado( documentoAlmacenadoDto.isEliminado() );
+        documentoAlmacenado.setFile( documentoAlmacenadoDto.getFile() );
+        documentoAlmacenado.setUrlFile( documentoAlmacenadoDto.getUrlFile() );
+
+        return documentoAlmacenado;
     }
 }
