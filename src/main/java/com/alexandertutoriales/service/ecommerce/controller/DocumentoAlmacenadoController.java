@@ -38,8 +38,9 @@ public class DocumentoAlmacenadoController {
         return service.save(obj);
     }
 
-    public GenericResponse update(Long aLong, DocumentoAlmacenado obj) {
-        return null;
+    @PutMapping("/editImage/{id}")
+    public GenericResponse update(@PathVariable Long id, @ModelAttribute DocumentoAlmacenado obj) {
+        return service.save(obj);
     }
     
     public GenericResponse delete(Long aLong) {
