@@ -40,10 +40,11 @@ public class DocumentoAlmacenadoController {
 
     @PutMapping("/editImage/{id}")
     public GenericResponse update(@PathVariable Long id, @ModelAttribute DocumentoAlmacenado obj) {
+        obj.setId(id);
         return service.save(obj);
     }
-    
-    public GenericResponse delete(Long aLong) {
-        return null;
+    @DeleteMapping("/deleteImage/{id}")
+    public GenericResponse delete(@PathVariable Long id) {
+        return service.deleteById(id);
     }
 }
