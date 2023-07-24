@@ -1,10 +1,6 @@
 
-Ö
-Usrc/main/java/com/alexandertutoriales/service/ecommerce/service/CategoriaService.java,9\3\9330f143f8488448edf4f4acea65a89abaeb4d57
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-É
-Ssrc/main/java/com/alexandertutoriales/service/ecommerce/mapper/CategoriaMapper.java,1\5\1543fd701cdc012dd2805858ed3a6b63090b92fa
 Ö
 Usrc/main/java/com/alexandertutoriales/service/ecommerce/mapperImpl/GenericMapper.java,4\b\4bb3a6dd357b053bf233390ad0da5ec7dd133e01
 ã
@@ -13,15 +9,11 @@ Usrc/main/java/com/alexandertutoriales/service/ecommerce/mapperImpl/GenericMappe
 ^src/main/java/com/alexandertutoriales/service/ecommerce/entity/dto/DocumentoAlmacenadoDto.java,f\5\f54fa04295843f96217489ca9d73bbc7c05626b3
 ç
 ]src/main/java/com/alexandertutoriales/service/ecommerce/mapper/DocumentoAlmacenadoMapper.java,e\9\e943ad8eac43448549cf659f5233104109b4a7c2
-ã
-[src/main/java/com/alexandertutoriales/service/ecommerce/repository/CategoriaRepository.java,a\6\a6b15a9d02b8a79970547ef339d7976b4a62d6db
 
 Osrc/main/java/com/alexandertutoriales/service/ecommerce/spec/CategoriaSpec.java,b\4\b4687f24b971751fd55f9bc10e7e5438cf74c9e6
-Ñ
-Tsrc/main/java/com/alexandertutoriales/service/ecommerce/entity/dto/CategoriaDto.java,3\d\3d040bb7169629030a1bfb226f0503ac1b2792e4
-}
-Msrc/main/java/com/alexandertutoriales/service/ecommerce/entity/Categoria.java,4\1\412967830db5f4944713c751790726ab9989ee75
 á
 Wsrc/main/java/com/alexandertutoriales/service/ecommerce/specImpl/CategoriaSpecImpl.java,4\7\47f98c68382df2327b68ab5938dc6551aa762116
 Ç
 Rsrc/main/java/com/alexandertutoriales/service/ecommerce/specImpl/AbstractSpec.java,0\1\0160b23ed2433bc6cb0df0073e72f2715813e9fc
+}
+Msrc/main/java/com/alexandertutoriales/service/ecommerce/config/WebConfig.java,0\7\07a110dacbb430ca9d46ca356e233e76ab94588e
