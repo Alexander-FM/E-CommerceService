@@ -19,7 +19,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public GenericResponse<UserDto> filtrar(@Valid @RequestBody() UserDto userDto) {
+    public GenericResponse<UserDto> login(@Valid @RequestBody() UserDto userDto) {
         return this.service.loginUser(userDto.getUsername(), userDto.getPassword());
     }
 }
