@@ -1,6 +1,5 @@
 package com.alexandertutoriales.service.ecommerce.controller;
 
-import com.alexandertutoriales.service.ecommerce.entity.Categoria;
 import com.alexandertutoriales.service.ecommerce.entity.dto.CategoriaDto;
 import com.alexandertutoriales.service.ecommerce.entity.filters.CategoriaFilter;
 import com.alexandertutoriales.service.ecommerce.exception.UnprocessableEntityException;
@@ -32,11 +31,7 @@ public class CategoriaController {
     public GenericResponse listarPlatillosRecomendados() {
         return this.service.listarCategoriasActivas();
     }
-    /*@PostMapping("/filtrar")
-    public GenericResponse<Page<CategoriaDto>> filtrar(Pageable pageRequest,
-        @Valid @RequestBody(required = false) CategoriaFilter filter) {
-        return this.service.findAll(pageRequest, filter);
-    }*/
+
     @PostMapping("/filtrar")
     public ResponseEntity<Page<CategoriaDto>> filtrar(Pageable pageRequest,
         @Valid @RequestBody(required = false) CategoriaFilter filter) {

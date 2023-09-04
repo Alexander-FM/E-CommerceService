@@ -14,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.domain.Sort.Order;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
@@ -38,27 +37,15 @@ public class CategoriaService {
                 this.repository.listarCategoriaActivas());
     }
 
-    /*public GenericResponse<Page<CategoriaDto>> findAll(Pageable page, CategoriaFilter filter){
-        if(page.getSort() == null){
-            List<Order> listaOrden = new ArrayList<>();
-            listaOrden.add(new Order(Direction.ASC, Categoria.C_NOMBRE));
-            Sort sort = Sort.by(listaOrden);
-            page = PageRequest.of(page.getPageNumber(), page.getPageSize(), sort);
-        }
-        // Page<Categoria> lista = repository.findAll(spec.filtrar(filter), page);
-        // return new GenericResponse<>(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, mapper.toDto(lista));
-        Page<CategoriaDto> lista = mapper.toDto(repository.findAll(spec.filtrar(filter), page));
-        return new GenericResponse<>(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, lista);
-    }*/
-
     /**
-     * Este método en el servicio devuelve de tipo Page. Ya no de un Generic Response.
-     * @param page
-     * @param filter
-     * @return
+     * Recupera una página de objetos CategoriaDto con filtrado opcional.
+     *
+     * @param page    La información de paginación y ordenación.
+     * @param filter  El filtro opcional para aplicar a la consulta.
+     * @return Una página de objetos CategoriaDto que cumplen con los criterios de filtro y orden.
      */
     public Page<CategoriaDto> findAll(Pageable page, CategoriaFilter filter){
-        // Comprobamos si existe Orden, sino ponemos el Genérico.
+        // Comprobamos si existe Orden, si no ponemos el Genérico.
         if(page.getSort() == null){
             List<Order> listaOrden = new ArrayList<>();
             listaOrden.add(new Order(Direction.ASC, Categoria.C_NOMBRE));
