@@ -8,6 +8,6 @@ public class HomeController {
 
     @RequestMapping("/")
     public String home() {
-        return "El servicio de E-Commerce ha sido activado";
+        return "El servicio de e-commerce ha sido activado";
     }
 }
