@@ -19,6 +19,14 @@ public class Empleado {
   private String apellidos;
   @Column
   private boolean vigencia;
+  @Column(length = 3)
+  private String tipo_documento;
+  @Column(length = 11)
+  private String numero_documento;
+  @Column(length = 50)
+  private String username;
+  @Column(length = 10)
+  private String password;
   @OneToOne
   private Rol rol;
   @Transient
@@ -70,5 +78,37 @@ public class Empleado {
 
   public void setVigenciaString(String vigenciaString) {
     this.vigenciaString = vigenciaString;
+  }
+
+  public String getTipo_documento() {
+    return tipo_documento;
+  }
+
+  public void setTipo_documento(String tipo_documento) {
+    this.tipo_documento = tipo_documento;
+  }
+
+  public String getNumero_documento() {
+    return numero_documento;
+  }
+
+  public void setNumero_documento(String numero_documento) {
+    this.numero_documento = numero_documento;
+  }
+
+  public String getUsername() {
+    return username;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public String getPassword() {
+    return password;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
   }
 }
