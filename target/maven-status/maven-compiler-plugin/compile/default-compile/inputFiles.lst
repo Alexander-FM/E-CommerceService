@@ -4,10 +4,9 @@ C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandert
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\exception\MyFileNotFoundException.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\service\CategoriaService.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\service\DocumentoAlmacenadoService.java
+C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\controller\HomeController.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\mapper\EmpleadoMapper.java
-C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\controller\UserController.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\service\PlatilloService.java
-C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\repository\UserRepository.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\entity\Pedido.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\mapper\DocumentoAlmacenadoMapper.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\specImpl\AbstractSpec.java
@@ -18,13 +17,10 @@ C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandert
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\entity\dto\GenerarPedidoDTO.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\mapper\RolMapper.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\config\FileStorageProperties.java
-C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\service\UserService.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\entity\DetallePedido.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\utils\GenericResponse.java
-C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\entity\User.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\controller\PedidoController.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\entity\Rol.java
-C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\mapper\UserMapper.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\exception\SpecificExceptionHandler.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\controller\CategoriaController.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\exception\FileStorageException.java
@@ -46,7 +42,6 @@ C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandert
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\controller\PlatilloController.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\repository\PedidoRepository.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\spec\CategoriaSpec.java
-C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\entity\dto\UserDto.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\repository\UsuarioRepository.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\entity\Usuario.java
 C:\Users\lfuenmed\Documents\TESIS\E-CommerceService\src\main\java\com\alexandertutoriales\service\ecommerce\repository\PlatilloRepository.java
