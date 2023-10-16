@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -119,21 +120,19 @@ public class PedidoService {
         Double rpta = this.detallePedidoRepository.totalByIdCustomer(idCli);
         if (optPedido.isPresent()) {
             try {
-                /*Double total = null;
-                if(rs.next()){
-                     total = rs.getDouble(1);
-                }*/
                 final Pedido pedido = optPedido.get();
                 final File file = ResourceUtils.getFile("classpath:exportInvoice.jasper");
-                final File imgLogo = ResourceUtils.getFile("classpath:images/logoCevicheria.png");
+                final File imgLogo = ResourceUtils.getFile("classpath:images/logoBisuteria.png");
                 final JasperReport report = (JasperReport) JRLoader.loadObject(file);
 
+                Locale locale = new Locale("es", "PE"); // Especifica el idioma y país según tu preferencia
+                NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
+                String formattedTotal = currencyFormatter.format(rpta);
                 final HashMap<String, Object> parameters = new HashMap<>();
                 parameters.put("nombreCliente", pedido.getCliente().getNombreCompletoCliente());
                 parameters.put("imgLogo", new FileInputStream(imgLogo));
-                parameters.put("total", rpta);
+                parameters.put("total", formattedTotal);
                 parameters.put("dsInvoice", new JRBeanCollectionDataSource((Collection<?>) this.detallePedidoRepository.findByPedido(idOrden)));
-
 
                 JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
                 byte[] reporte = JasperExportManager.exportReportToPdf(jasperPrint);

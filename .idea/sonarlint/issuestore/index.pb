@@ -41,8 +41,6 @@ Ysrc/main/java/com/alexandertutoriales/service/ecommerce/config/FileStoragePrope
 Msrc/main/java/com/alexandertutoriales/service/ecommerce/config/WebConfig.java,0\7\07a110dacbb430ca9d46ca356e233e76ab94588e
 ï
 esrc/main/java/com/alexandertutoriales/service/ecommerce/controller/DocumentoAlmacenadoController.java,a\b\ab5b0d47f4605be4b62d24b808d2f726659d8e56
-z
-Jsrc/main/java/com/alexandertutoriales/service/ecommerce/entity/Pedido.java,6\c\6c9bce56c2d5c216e003e6127ab068e7d6959965
 \
 ,.idea/inspectionProfiles/Project_Default.xml,4\9\496a238a6afa168dbaf6efd37bb459331589579c
 á
@@ -181,5 +179,3 @@ w
 G.idea/sonarlint/issuestore/e/f/ef8e5d1ccdd7e588227f18bb5ecc21bed3d6dd64,7\b\7b3d582d828c507b76b625eca3eeeee3935ec60f
 Å
 Q.idea/sonarlint/securityhotspotstore/2/4/249f071d5894a5775510847dde303febef392ee3,4\2\42c0993c4406711d16b5f8558868211b5fc60736
-ã
-[src/main/java/com/alexandertutoriales/service/ecommerce/controller/CategoriaController.java,a\f\afbc2ffd69e02fe28a06566a144870eb0036a06a

@@ -1,32 +1,0 @@
-
-J
-java:S3740:"/Provide the parametrized type for this generic.(…İøÁşÿÿÿÿ
-J
-java:S3740>"/Provide the parametrized type for this generic.(ôÂºøÿÿÿÿ
-J
-java:S3740K"/Provide the parametrized type for this generic.(çÈËêûÿÿÿÿ
-J
-java:S3740O"/Provide the parametrized type for this generic.(†óæÜÿÿÿÿÿ
-J
-java:S3740\"/Provide the parametrized type for this generic.(çÈËêûÿÿÿÿ
-E
-java:S3740`"/Provide the parametrized type for this generic.(Çï©à
-J
-java:S3740f"/Provide the parametrized type for this generic.(Æ¶±Œùÿÿÿÿ
-J
-java:S3740h"/Provide the parametrized type for this generic.(©«°äùÿÿÿÿ
-\
-java:S2637"EThis method's return value is marked "@NotNull" but null is returned.(¥¹ï
-G
-java:S16027",Remove useless curly braces around statement(›şÈùÿÿÿÿ
-V	java:S125z"<This block of commented-out lines of code should be removed.(¿È÷¯ûÿÿÿÿ
-C
-java:S1905•"'Remove this unnecessary cast to "long".(×¨­ìüÿÿÿÿ
-R
-java:S1128"7Remove this unused import 'javax.xml.transform.Result'.(âÓ¸ûÿÿÿÿ
-U
-java:S1128":Remove this unused import 'java.io.FileNotFoundException'.(·î™ùÿÿÿÿ
-K
-java:S1128"0Remove this unused import 'java.io.IOException'.(ªº»Úıÿÿÿÿ
-D
-java:S1128"/Remove this unused import 'java.sql.ResultSet'.(ˆóÚw
