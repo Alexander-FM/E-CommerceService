@@ -9,7 +9,7 @@ public interface PlatilloRepository extends CrudRepository<Platillo, Integer> {
     @Query("SELECT P FROM Platillo P WHERE P.recomendado IS TRUE AND P.stock > 0")
     Iterable<Platillo> listarPlatillosRecomendados();
 
-    @Query("SELECT P FROM Platillo P WHERE P.categoria.id=:idC")
+    @Query("SELECT P FROM Platillo P WHERE P.categoria.id=:idC AND P.stock > 0 AND P.vigencia IS TRUE")
     Iterable<Platillo> listarPlatillosPorCategoria(int idC);
 
     @Modifying
