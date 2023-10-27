@@ -15,6 +15,8 @@ public class Usuario {
     private boolean vigencia;
     @OneToOne
     private Cliente cliente;
+    @OneToOne
+    private Dispositivo dispositivo;
 
     public int getId() {
         return id;
@@ -54,5 +56,13 @@ public class Usuario {
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
+    }
+
+    public Dispositivo getDispositivo() {
+        return dispositivo;
+    }
+
+    public void setDispositivo(Dispositivo dispositivo) {
+        this.dispositivo = dispositivo;
     }
 }

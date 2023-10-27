@@ -5,6 +5,7 @@ com\alexandertutoriales\service\ecommerce\controller\CategoriaController.class
 com\alexandertutoriales\service\ecommerce\controller\PedidoController.class
 com\alexandertutoriales\service\ecommerce\service\PedidoService.class
 com\alexandertutoriales\service\ecommerce\entity\filters\CategoriaFilter.class
+com\alexandertutoriales\service\ecommerce\service\DispositivoService.class
 com\alexandertutoriales\service\ecommerce\service\DetallePedidoService.class
 com\alexandertutoriales\service\ecommerce\entity\Usuario.class
 com\alexandertutoriales\service\ecommerce\exception\MyFileNotFoundException.class
@@ -17,6 +18,7 @@ com\alexandertutoriales\service\ecommerce\entity\dto\PedidoConDetallesDTO.class
 com\alexandertutoriales\service\ecommerce\repository\UsuarioRepository.class
 com\alexandertutoriales\service\ecommerce\mapper\RolMapper.class
 com\alexandertutoriales\service\ecommerce\service\ClienteService.class
+com\alexandertutoriales\service\ecommerce\entity\Dispositivo.class
 com\alexandertutoriales\service\ecommerce\spec\CategoriaSpec.class
 com\alexandertutoriales\service\ecommerce\mapper\EmpleadoMapper.class
 com\alexandertutoriales\service\ecommerce\controller\UsuarioController.class
@@ -46,8 +48,10 @@ com\alexandertutoriales\service\ecommerce\service\FileStorageService.class
 com\alexandertutoriales\service\ecommerce\controller\HomeController.class
 com\alexandertutoriales\service\ecommerce\mapperImpl\GenericMapper.class
 com\alexandertutoriales\service\ecommerce\config\FileStorageProperties.class
+com\alexandertutoriales\service\ecommerce\controller\DispositivoController.class
 com\alexandertutoriales\service\ecommerce\repository\CategoriaRepository.class
 com\alexandertutoriales\service\ecommerce\entity\dto\RolDto.class
+com\alexandertutoriales\service\ecommerce\repository\DispositivoRepository.class
 com\alexandertutoriales\service\ecommerce\entity\DetallePedido.class
 com\alexandertutoriales\service\ecommerce\utils\GenericResponse.class
 com\alexandertutoriales\service\ecommerce\entity\Platillo.class

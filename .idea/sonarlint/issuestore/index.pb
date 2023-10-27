@@ -9,8 +9,6 @@
 Rsrc/main/java/com/alexandertutoriales/service/ecommerce/specImpl/AbstractSpec.java,0\1\0160b23ed2433bc6cb0df0073e72f2715813e9fc
 
 Osrc/main/java/com/alexandertutoriales/service/ecommerce/spec/CategoriaSpec.java,b\4\b4687f24b971751fd55f9bc10e7e5438cf74c9e6
-{
-Ksrc/main/java/com/alexandertutoriales/service/ecommerce/entity/Usuario.java,4\e\4ec12017d0ac8b6c16ac4e3c87b95dae9dba2c05
 ‰
 Ysrc/main/java/com/alexandertutoriales/service/ecommerce/repository/UsuarioRepository.java,3\5\35796e75ad1ae150fb3bb4fb6ef3609c806eef80
 ƒ
@@ -50,8 +48,6 @@ Usrc/main/java/com/alexandertutoriales/service/ecommerce/mapperImpl/GenericMappe
 €
 Psrc/main/java/com/alexandertutoriales/service/ecommerce/service/UserService.java,0\4\04a8d413b3bf218b1a41e56f87660158d249111d
 ‰
-Ysrc/main/java/com/alexandertutoriales/service/ecommerce/repository/ClienteRepository.java,7\2\7289a81ff351fbb8ce2d01d4658379188c0777b1
-‰
 Ysrc/main/java/com/alexandertutoriales/service/ecommerce/service/DetallePedidoService.java,e\f\ef8e5d1ccdd7e588227f18bb5ecc21bed3d6dd64
 }
 Msrc/main/java/com/alexandertutoriales/service/ecommerce/entity/Categoria.java,4\1\412967830db5f4944713c751790726ab9989ee75
@@ -59,14 +55,10 @@ Msrc/main/java/com/alexandertutoriales/service/ecommerce/entity/Categoria.java,
 Tsrc/main/java/com/alexandertutoriales/service/ecommerce/entity/dto/CategoriaDto.java,3\d\3d040bb7169629030a1bfb226f0503ac1b2792e4
 ƒ
 Ssrc/main/java/com/alexandertutoriales/service/ecommerce/mapper/CategoriaMapper.java,1\5\1543fd701cdc012dd2805858ed3a6b63090b92fa
-‹
-[src/main/java/com/alexandertutoriales/service/ecommerce/repository/CategoriaRepository.java,a\6\a6b15a9d02b8a79970547ef339d7976b4a62d6db
 ƒ
 Ssrc/main/java/com/alexandertutoriales/service/ecommerce/service/ClienteService.java,b\7\b7fc77b75ff750668046c71d56650d54c0f42002
 |
 Lsrc/main/java/com/alexandertutoriales/service/ecommerce/entity/Platillo.java,a\8\a80adb3cf5f2c2e65d43f2ee46d3fa226ba7a1c9
-…
-Usrc/main/java/com/alexandertutoriales/service/ecommerce/service/CategoriaService.java,9\3\9330f143f8488448edf4f4acea65a89abaeb4d57
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
 w
