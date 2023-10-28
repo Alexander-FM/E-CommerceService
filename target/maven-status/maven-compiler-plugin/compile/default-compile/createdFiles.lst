@@ -53,6 +53,7 @@ com\alexandertutoriales\service\ecommerce\repository\CategoriaRepository.class
 com\alexandertutoriales\service\ecommerce\entity\dto\RolDto.class
 com\alexandertutoriales\service\ecommerce\repository\DispositivoRepository.class
 com\alexandertutoriales\service\ecommerce\entity\DetallePedido.class
+com\alexandertutoriales\service\ecommerce\utils\SendNotification.class
 com\alexandertutoriales\service\ecommerce\utils\GenericResponse.class
 com\alexandertutoriales\service\ecommerce\entity\Platillo.class
 com\alexandertutoriales\service\ecommerce\repository\PlatilloRepository.class
