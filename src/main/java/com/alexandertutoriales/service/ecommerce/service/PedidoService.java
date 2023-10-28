@@ -16,6 +16,7 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.core.io.Resource;
 import org.springframework.util.ResourceUtils;
@@ -41,12 +42,14 @@ public class PedidoService {
     private final DetallePedidoRepository detallePedidoRepository;
     private final DetallePedidoService dpService;
     private final PlatilloRepository pRepository;
+    private final SimpMessagingTemplate template;
 
-    public PedidoService(PedidoRepository repository, DetallePedidoRepository detallePedidoRepository, DetallePedidoService dpService, PlatilloRepository pRepository) {
+    public PedidoService(PedidoRepository repository, DetallePedidoRepository detallePedidoRepository, DetallePedidoService dpService, PlatilloRepository pRepository, SimpMessagingTemplate template) {
         this.repository = repository;
         this.detallePedidoRepository = detallePedidoRepository;
         this.dpService = dpService;
         this.pRepository = pRepository;
+        this.template = template;
     }
 
     //Método para devolver los pedidos con detalles
@@ -73,6 +76,7 @@ public class PedidoService {
         }
         //Llamamos al servicio de Detalle Venta para guardar los respectivos detalles del pedido.
         this.dpService.guardarDetalles(dto.getDetallePedido());
+        template.convertAndSend("/topic/pedido-notification", dto);
         return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
     }
 
@@ -145,7 +149,7 @@ public class PedidoService {
                                 .toString()).build();
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentDisposition(contentDisposition);
-                return ResponseEntity.ok().contentLength((long)reporte.length)
+                return ResponseEntity.ok().contentLength((long) reporte.length)
                         .contentType(MediaType.APPLICATION_PDF)
                         .headers(headers).body(new ByteArrayResource(reporte));
             } catch (Exception e) {
