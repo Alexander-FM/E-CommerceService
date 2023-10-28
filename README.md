@@ -28,7 +28,7 @@ Obtén las credenciales de Firebase y configúralas en el archivo src/main/resou
   firebase.project.id=tu_project_id
 ```
 ## WebSockets
-En este proyecto, utilizamos WebSockets para enviar notificaciones en tiempo real a la aplicación web cuando se registra una compra desde el aplicactivo móvil.
+En este proyecto, utilizamos WebSockets para enviar notificaciones en tiempo real a la aplicación web cuando se registra una compra desde el aplicativo móvil.
 ## JasperReports
 Asegúrate de tener JasperStudio correctamente instalado y configurado en tu sistema por si deseas agregar más reportes.
 
@@ -39,7 +39,7 @@ Para ejecutar el servicio, simplemente ejecuta el siguiente comando en la raíz 
   mvn spring-boot:run
 ```
 # Uso
-El servicio proporciona una API REST documentada con Swagger. Puedes acceder a la documentación en: [documentation.local](http://localhost:8080/swagger-ui.html)
+El servicio proporciona una API REST documentada con Swagger. Puedes acceder a la documentación en: [documentation.local.](http://localhost:8080/swagger-ui.html)
 
 # Pantallazos
 
