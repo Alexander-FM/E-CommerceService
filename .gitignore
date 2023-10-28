@@ -1,5 +1,3 @@
-### NetBeans ###
-/target/
 ### Intellij Idea ###
-/.idea
+.idea
 target
