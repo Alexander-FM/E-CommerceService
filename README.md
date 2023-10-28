@@ -38,6 +38,12 @@ Para ejecutar el servicio, simplemente ejecuta el siguiente comando en la raíz 
 ```bash
   mvn spring-boot:run
 ```
+Pero antes de todo, recomendamos hacer un clean install para que asegurarte de que los mappers generados estén actualizados y correctamente incorporados en la aplicación.
+```bash
+  mvn clean
+  mvn install
+```
+
 # Uso
 El servicio proporciona una API REST documentada con Swagger. Puedes acceder a la documentación en: [documentation.local.](http://localhost:8080/swagger-ui.html)
 
