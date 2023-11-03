@@ -28,7 +28,7 @@ public class OfertaController {
   }
 
   /**
-   * Listar ofertas
+   * Listar ofertas.
    *
    * @return the generic response
    */
