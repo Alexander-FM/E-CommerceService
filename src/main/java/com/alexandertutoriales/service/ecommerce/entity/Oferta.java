@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -36,6 +37,9 @@ public class Oferta {
 
   @Column
   private boolean vigencia;
+
+  @OneToOne
+  private DocumentoAlmacenado banner;
 
   public int getId() {
     return id;
@@ -85,4 +89,11 @@ public class Oferta {
     this.vigencia = vigencia;
   }
 
+  public DocumentoAlmacenado getBanner() {
+    return banner;
+  }
+
+  public void setBanner(DocumentoAlmacenado banner) {
+    this.banner = banner;
+  }
 }
