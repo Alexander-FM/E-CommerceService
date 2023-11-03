@@ -1,11 +1,17 @@
 package com.alexandertutoriales.service.ecommerce.entity.dto;
 
 public class EmpleadoDto {
+
   private Long id;
+
   private String nombre;
+
   private String apellidos;
+
   private boolean vigencia;
+
   private RolDto rol;
+
   private String vigenciaString;
 
   public Long getId() {

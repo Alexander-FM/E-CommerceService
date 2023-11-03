@@ -1,10 +1,11 @@
 package com.alexandertutoriales.service.ecommerce.specImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.alexandertutoriales.service.ecommerce.entity.Categoria;
 import com.alexandertutoriales.service.ecommerce.entity.filters.CategoriaFilter;
 import com.alexandertutoriales.service.ecommerce.spec.CategoriaSpec;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public class CategoriaSpecImpl extends AbstractSpec implements CategoriaSpec {
     return ((root, query, cb) -> {
       List<Predicate> conditions = new ArrayList<>();
       if (filter.getVerInactivos() == null || filter.getVerInactivos().equals("NO")) {
-        conditions.add(cb.equal(root.get(Categoria.C_VIGENCIA),1));
+        conditions.add(cb.equal(root.get(Categoria.C_VIGENCIA), 1));
       }
       if (filter.getNombre() != null) {
         conditions.add(like(cb, root.get(Categoria.C_NOMBRE), filter.getNombre()));

@@ -1,68 +1,79 @@
 package com.alexandertutoriales.service.ecommerce.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Usuario {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(length = 500)
-    private String email;
-    @Column(length = 20)
-    private String clave;
-    @Column
-    private boolean vigencia;
-    @OneToOne
-    private Cliente cliente;
-    @OneToOne
-    private Dispositivo dispositivo;
 
-    public int getId() {
-        return id;
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  @Column(length = 500)
+  private String email;
 
-    public String getEmail() {
-        return email;
-    }
+  @Column(length = 20)
+  private String clave;
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  @Column
+  private boolean vigencia;
 
-    public String getClave() {
-        return clave;
-    }
+  @OneToOne
+  private Cliente cliente;
 
-    public void setClave(String clave) {
-        this.clave = clave;
-    }
+  @OneToOne
+  private Dispositivo dispositivo;
 
-    public boolean isVigencia() {
-        return vigencia;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public void setVigencia(boolean vigencia) {
-        this.vigencia = vigencia;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public Cliente getCliente() {
-        return cliente;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public Dispositivo getDispositivo() {
-        return dispositivo;
-    }
+  public String getClave() {
+    return clave;
+  }
 
-    public void setDispositivo(Dispositivo dispositivo) {
-        this.dispositivo = dispositivo;
-    }
+  public void setClave(String clave) {
+    this.clave = clave;
+  }
+
+  public boolean isVigencia() {
+    return vigencia;
+  }
+
+  public void setVigencia(boolean vigencia) {
+    this.vigencia = vigencia;
+  }
+
+  public Cliente getCliente() {
+    return cliente;
+  }
+
+  public void setCliente(Cliente cliente) {
+    this.cliente = cliente;
+  }
+
+  public Dispositivo getDispositivo() {
+    return dispositivo;
+  }
+
+  public void setDispositivo(Dispositivo dispositivo) {
+    this.dispositivo = dispositivo;
+  }
 }

@@ -1,10 +1,15 @@
 package com.alexandertutoriales.service.ecommerce.entity.dto;
 
 public class CategoriaDto {
+
   private Integer id;
+
   private String nombre;
+
   private boolean vigencia;
+
   private String vigenciaString;
+
   private DocumentoAlmacenadoDto foto;
 
   public Integer getId() {

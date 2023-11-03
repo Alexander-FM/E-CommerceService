@@ -1,97 +1,112 @@
 package com.alexandertutoriales.service.ecommerce.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+
 @Entity
 public class Platillo {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(length = 100)
-    private String nombre;
-    @OneToOne
-    private DocumentoAlmacenado foto;
-    @Column
-    private Double precio;
-    @Column
-    private int stock;
-    @Column(length = 500)
-    private String descripcionPlatillo;
-    @OneToOne
-    private Categoria categoria;
-    @Column
-    private boolean vigencia;
-    @Column
-    private boolean recomendado;
 
-    public int getId() {
-        return id;
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+  @Column(length = 100)
+  private String nombre;
 
-    public String getNombre() {
-        return nombre;
-    }
+  @OneToOne
+  private DocumentoAlmacenado foto;
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+  @Column
+  private Double precio;
 
-    public DocumentoAlmacenado getFoto() {
-        return foto;
-    }
+  @Column
+  private int stock;
 
-    public void setFoto(DocumentoAlmacenado foto) {
-        this.foto = foto;
-    }
+  @Column(length = 500)
+  private String descripcionPlatillo;
 
-    public Double getPrecio() {
-        return precio;
-    }
+  @OneToOne
+  private Categoria categoria;
 
-    public void setPrecio(Double precio) {
-        this.precio = precio;
-    }
+  @Column
+  private boolean vigencia;
 
-    public int getStock() {
-        return stock;
-    }
+  @Column
+  private boolean recomendado;
 
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
+  public int getId() {
+    return id;
+  }
 
-    public String getDescripcionPlatillo() {
-        return descripcionPlatillo;
-    }
+  public void setId(int id) {
+    this.id = id;
+  }
 
-    public void setDescripcionPlatillo(String descripcionPlatillo) {
-        this.descripcionPlatillo = descripcionPlatillo;
-    }
+  public String getNombre() {
+    return nombre;
+  }
 
-    public Categoria getCategoria() {
-        return categoria;
-    }
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
 
-    public void setCategoria(Categoria categoria) {
-        this.categoria = categoria;
-    }
+  public DocumentoAlmacenado getFoto() {
+    return foto;
+  }
 
-    public boolean isVigencia() {
-        return vigencia;
-    }
+  public void setFoto(DocumentoAlmacenado foto) {
+    this.foto = foto;
+  }
 
-    public void setVigencia(boolean vigencia) {
-        this.vigencia = vigencia;
-    }
+  public Double getPrecio() {
+    return precio;
+  }
 
-    public boolean isRecomendado() {
-        return recomendado;
-    }
+  public void setPrecio(Double precio) {
+    this.precio = precio;
+  }
 
-    public void setRecomendado(boolean recomendado) {
-        this.recomendado = recomendado;
-    }
+  public int getStock() {
+    return stock;
+  }
+
+  public void setStock(int stock) {
+    this.stock = stock;
+  }
+
+  public String getDescripcionPlatillo() {
+    return descripcionPlatillo;
+  }
+
+  public void setDescripcionPlatillo(String descripcionPlatillo) {
+    this.descripcionPlatillo = descripcionPlatillo;
+  }
+
+  public Categoria getCategoria() {
+    return categoria;
+  }
+
+  public void setCategoria(Categoria categoria) {
+    this.categoria = categoria;
+  }
+
+  public boolean isVigencia() {
+    return vigencia;
+  }
+
+  public void setVigencia(boolean vigencia) {
+    this.vigencia = vigencia;
+  }
+
+  public boolean isRecomendado() {
+    return recomendado;
+  }
+
+  public void setRecomendado(boolean recomendado) {
+    this.recomendado = recomendado;
+  }
 }

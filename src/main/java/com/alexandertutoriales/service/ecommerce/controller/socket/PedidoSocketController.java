@@ -6,8 +6,9 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class PedidoSocketController {
-    @SendTo("/topic/pedido-notification")
-    public GenerarPedidoDTO notification(GenerarPedidoDTO response) {
-        return response;
-    }
+
+  @SendTo("/topic/pedido-notification")
+  public GenerarPedidoDTO notification(GenerarPedidoDTO response) {
+    return response;
+  }
 }

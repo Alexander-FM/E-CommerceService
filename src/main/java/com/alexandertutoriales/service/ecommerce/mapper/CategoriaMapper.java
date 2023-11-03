@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface CategoriaMapper extends GenericMapper<CategoriaDto, Categoria> {
+
   @Override
   CategoriaDto toDto(Categoria categoria);
 

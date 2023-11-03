@@ -10,19 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/platillo")
 public class PlatilloController {
-    private PlatilloService service;
 
-    public PlatilloController(PlatilloService service) {
-        this.service = service;
-    }
+  private PlatilloService service;
 
-    @GetMapping
-    public GenericResponse listarPlatillosRecomendados() {
-        return this.service.listarPlatillosRecomendados();
-    }
+  public PlatilloController(PlatilloService service) {
+    this.service = service;
+  }
 
-    @GetMapping("/{idC}")
-    public GenericResponse listPlatillosPorCategoria(@PathVariable int idC) {
-        return this.service.listarPlatillosPorCategoria(idC);
-    }
+  @GetMapping
+  public GenericResponse listarPlatillosRecomendados() {
+    return this.service.listarPlatillosRecomendados();
+  }
+
+  @GetMapping("/{idC}")
+  public GenericResponse listPlatillosPorCategoria(@PathVariable int idC) {
+    return this.service.listarPlatillosPorCategoria(idC);
+  }
 }

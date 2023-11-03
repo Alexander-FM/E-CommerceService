@@ -1,107 +1,111 @@
 package com.alexandertutoriales.service.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.persistence.*;
 
 @Entity
 public class DocumentoAlmacenado {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
 
-    private String nombre;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private long id;
 
-    private String fileName;
+  private String nombre;
 
-    private String extension;
+  private String fileName;
 
-    private String estado;
+  private String extension;
 
-    private boolean eliminado;
+  private String estado;
 
-    @Transient
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private MultipartFile file;
+  private boolean eliminado;
 
-    @Transient
-    private String urlFile;
+  @Transient
+  @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+  private MultipartFile file;
 
-    public DocumentoAlmacenado() {
-        id = 0;
-        nombre = "";
-        fileName = "";
-        extension = "";
-        estado = "A";
-        eliminado = false;
-    }
+  @Transient
+  private String urlFile;
 
-    public long getId() {
-        return id;
-    }
+  public DocumentoAlmacenado() {
+    id = 0;
+    nombre = "";
+    fileName = "";
+    extension = "";
+    estado = "A";
+    eliminado = false;
+  }
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public String getNombre() {
-        return nombre;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+  public String getNombre() {
+    return nombre;
+  }
 
-    public String getFileName() {
-        return fileName;
-    }
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+  public String getFileName() {
+    return fileName;
+  }
 
-    public String getExtension() {
-        return extension;
-    }
+  public void setFileName(String fileName) {
+    this.fileName = fileName;
+  }
 
-    public void setExtension(String extension) {
-        this.extension = extension;
-    }
+  public String getExtension() {
+    return extension;
+  }
 
-    public String getEstado() {
-        return estado;
-    }
+  public void setExtension(String extension) {
+    this.extension = extension;
+  }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+  public String getEstado() {
+    return estado;
+  }
 
-    public boolean isEliminado() {
-        return eliminado;
-    }
+  public void setEstado(String estado) {
+    this.estado = estado;
+  }
 
-    public void setEliminado(boolean eliminado) {
-        this.eliminado = eliminado;
-    }
+  public boolean isEliminado() {
+    return eliminado;
+  }
 
-    public MultipartFile getFile() {
-        return file;
-    }
+  public void setEliminado(boolean eliminado) {
+    this.eliminado = eliminado;
+  }
 
-    public void setFile(MultipartFile file) {
-        this.file = file;
-    }
+  public MultipartFile getFile() {
+    return file;
+  }
 
-    public String getUrlFile() {
-        return urlFile;
-    }
+  public void setFile(MultipartFile file) {
+    this.file = file;
+  }
 
-    public void setUrlFile(String urlFile) {
-        this.urlFile = urlFile;
-    }
+  public String getUrlFile() {
+    return urlFile;
+  }
 
-    public String getCompleteFileName() {
-        return fileName + extension;
-    }
+  public void setUrlFile(String urlFile) {
+    this.urlFile = urlFile;
+  }
+
+  public String getCompleteFileName() {
+    return fileName + extension;
+  }
 }

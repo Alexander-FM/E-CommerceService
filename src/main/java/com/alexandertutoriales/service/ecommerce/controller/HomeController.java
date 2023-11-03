@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HomeController {
 
-    @RequestMapping("/")
-    public String home() {
-        return "El servicio de e-commerce ha sido activado";
-    }
+  @RequestMapping("/")
+  public String home() {
+    return "El servicio de e-commerce ha sido activado";
+  }
 }

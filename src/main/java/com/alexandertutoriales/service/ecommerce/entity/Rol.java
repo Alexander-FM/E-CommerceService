@@ -8,9 +8,11 @@ import javax.persistence.Id;
 
 @Entity
 public class Rol {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   @Column(length = 100)
   private String nombre;
 

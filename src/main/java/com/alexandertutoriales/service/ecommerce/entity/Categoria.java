@@ -1,61 +1,73 @@
 package com.alexandertutoriales.service.ecommerce.entity;
 
-import javax.persistence.*;
-import javax.print.Doc;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class Categoria {
-    public static final String C_NOMBRE = "nombre";
-    public static final String C_VIGENCIA = "vigencia";
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(length = 100)
-    private String nombre;
-    @Column
-    private boolean vigencia;
-    @OneToOne
-    private DocumentoAlmacenado foto;
-    @Transient
-    private String vigenciaString;
 
-    public Integer getId() {
-        return id;
-    }
+  public static final String C_NOMBRE = "nombre";
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public static final String C_VIGENCIA = "vigencia";
 
-    public String getNombre() {
-        return nombre;
-    }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+  @Column(length = 100)
+  private String nombre;
 
-    public boolean isVigencia() {
-        return vigencia;
-    }
+  @Column
+  private boolean vigencia;
 
-    public void setVigencia(boolean vigencia) {
-        this.vigencia = vigencia;
-    }
+  @OneToOne
+  private DocumentoAlmacenado foto;
 
-    public DocumentoAlmacenado getFoto() {
-        return foto;
-    }
+  @Transient
+  private String vigenciaString;
 
-    public void setFoto(DocumentoAlmacenado foto) {
-        this.foto = foto;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public String getVigenciaString() {
-        return vigenciaString;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public void setVigenciaString(String vigenciaString) {
-        this.vigenciaString = vigenciaString;
-    }
+  public String getNombre() {
+    return nombre;
+  }
+
+  public void setNombre(String nombre) {
+    this.nombre = nombre;
+  }
+
+  public boolean isVigencia() {
+    return vigencia;
+  }
+
+  public void setVigencia(boolean vigencia) {
+    this.vigencia = vigencia;
+  }
+
+  public DocumentoAlmacenado getFoto() {
+    return foto;
+  }
+
+  public void setFoto(DocumentoAlmacenado foto) {
+    this.foto = foto;
+  }
+
+  public String getVigenciaString() {
+    return vigenciaString;
+  }
+
+  public void setVigenciaString(String vigenciaString) {
+    this.vigenciaString = vigenciaString;
+  }
 }

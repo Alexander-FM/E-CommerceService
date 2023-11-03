@@ -22,62 +22,67 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api/categoria")
 public class CategoriaController {
-    private final CategoriaService service;
 
-    public CategoriaController(CategoriaService service) {
-        this.service = service;
-    }
-    @GetMapping
-    public GenericResponse listarPlatillosRecomendados() {
-        return this.service.listarCategoriasActivas();
-    }
+  private final CategoriaService service;
 
-    @PostMapping("/filtrar")
-    public ResponseEntity<Page<CategoriaDto>> filtrar(Pageable pageRequest,
-        @Valid @RequestBody(required = false) CategoriaFilter filter) {
-        return ResponseEntity.ok(this.service.findAll(pageRequest, filter));
-    }
-    @GetMapping("/getById/{id}")
-    public ResponseEntity<CategoriaDto> getCategoriaById(@PathVariable(required = true) int id) {
-        CategoriaDto categoriaDto = this.service.findCategoriaById(id);
-        return ResponseEntity.ok(categoriaDto);
-    }
-    @PostMapping
-    public ResponseEntity<Integer> create(@Valid @RequestBody CategoriaDto categoriaDto) {
-        // No proporcionar identificador en la creación, si lo hace dará un error.
-        if (categoriaDto.getId() != null) {
-            throw new UnprocessableEntityException();
-        }
-        Integer id = this.service.save(categoriaDto);
+  public CategoriaController(CategoriaService service) {
+    this.service = service;
+  }
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(id);
-    }
-    @PutMapping(value = "/{categoriaInfo}")
-    public ResponseEntity<Integer> update(@PathVariable(value = "categoriaInfo", required = true) Integer id,
-        @Valid @RequestBody CategoriaDto categoriaDto){
-        categoriaDto.setId(id);
-        Integer categoriaId = this.service.save(categoriaDto);
-        return ResponseEntity.ok(categoriaId);
-    }
+  @GetMapping
+  public GenericResponse listarPlatillosRecomendados() {
+    return this.service.listarCategoriasActivas();
+  }
 
-    @DeleteMapping("/deleteCategoria/{categoriaId}")
-    public ResponseEntity<Void> deleteContrato(@Valid @PathVariable Integer categoriaId) {
-        if (categoriaId == null) {
-            throw new UnprocessableEntityException();
-        }
-        this.service.deleteCategoriaById(categoriaId);
-        return ResponseEntity.ok().build();
-    }
+  @PostMapping("/filtrar")
+  public ResponseEntity<Page<CategoriaDto>> filtrar(Pageable pageRequest,
+      @Valid @RequestBody(required = false) CategoriaFilter filter) {
+    return ResponseEntity.ok(this.service.findAll(pageRequest, filter));
+  }
 
-    @GetMapping("/desactivar/{id}")
-    public ResponseEntity<Void> desactivar(@PathVariable(required = false) Integer id) {
-        this.service.desactivar(id);
-        return ResponseEntity.ok().build();
-    }
+  @GetMapping("/getById/{id}")
+  public ResponseEntity<CategoriaDto> getCategoriaById(@PathVariable(required = true) int id) {
+    CategoriaDto categoriaDto = this.service.findCategoriaById(id);
+    return ResponseEntity.ok(categoriaDto);
+  }
 
-    @GetMapping("/activar/{id}")
-    public ResponseEntity<Void> activar(@PathVariable(required = false) Integer id) {
-        this.service.activar(id);
-        return ResponseEntity.ok().build();
+  @PostMapping
+  public ResponseEntity<Integer> create(@Valid @RequestBody CategoriaDto categoriaDto) {
+    // No proporcionar identificador en la creación, si lo hace dará un error.
+    if (categoriaDto.getId() != null) {
+      throw new UnprocessableEntityException();
     }
+    Integer id = this.service.save(categoriaDto);
+
+    return ResponseEntity.status(HttpStatus.CREATED).body(id);
+  }
+
+  @PutMapping(value = "/{categoriaInfo}")
+  public ResponseEntity<Integer> update(@PathVariable(value = "categoriaInfo", required = true) Integer id,
+      @Valid @RequestBody CategoriaDto categoriaDto) {
+    categoriaDto.setId(id);
+    Integer categoriaId = this.service.save(categoriaDto);
+    return ResponseEntity.ok(categoriaId);
+  }
+
+  @DeleteMapping("/deleteCategoria/{categoriaId}")
+  public ResponseEntity<Void> deleteContrato(@Valid @PathVariable Integer categoriaId) {
+    if (categoriaId == null) {
+      throw new UnprocessableEntityException();
+    }
+    this.service.deleteCategoriaById(categoriaId);
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/desactivar/{id}")
+  public ResponseEntity<Void> desactivar(@PathVariable(required = false) Integer id) {
+    this.service.desactivar(id);
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("/activar/{id}")
+  public ResponseEntity<Void> activar(@PathVariable(required = false) Integer id) {
+    this.service.activar(id);
+    return ResponseEntity.ok().build();
+  }
 }

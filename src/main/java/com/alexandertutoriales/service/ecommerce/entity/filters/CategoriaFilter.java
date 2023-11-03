@@ -1,7 +1,9 @@
 package com.alexandertutoriales.service.ecommerce.entity.filters;
 
 public class CategoriaFilter {
+
   private String nombre;
+
   private String verInactivos;
 
   public String getNombre() {

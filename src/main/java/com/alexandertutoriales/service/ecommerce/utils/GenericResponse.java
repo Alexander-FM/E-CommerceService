@@ -1,60 +1,65 @@
 package com.alexandertutoriales.service.ecommerce.utils;
 
 public class GenericResponse<T> {
-    private String type;
-    private int rpta;
-    private String message;
-    private T body;
-    public GenericResponse() {
-        type = "";
-        rpta = 0;
-        message = "";
-        body = null;
-    }
 
-    public GenericResponse(String bodyType, Object body) {
-        type = "";
-        rpta = 0;
-        message = "";
-        this.body = null;
-    }
+  private String type;
 
-    public GenericResponse(String type, int rpta, String message, T body) {
-        this.type = type;
-        this.rpta = rpta;
-        this.message = message;
-        this.body = body;
-    }
+  private int rpta;
 
-    public String getType() {
-        return type;
-    }
+  private String message;
 
-    public void setType(String type) {
-        this.type = type;
-    }
+  private T body;
 
-    public int getRpta() {
-        return rpta;
-    }
+  public GenericResponse() {
+    type = "";
+    rpta = 0;
+    message = "";
+    body = null;
+  }
 
-    public void setRpta(int rpta) {
-        this.rpta = rpta;
-    }
+  public GenericResponse(String bodyType, Object body) {
+    type = "";
+    rpta = 0;
+    message = "";
+    this.body = null;
+  }
 
-    public String getMessage() {
-        return message;
-    }
+  public GenericResponse(String type, int rpta, String message, T body) {
+    this.type = type;
+    this.rpta = rpta;
+    this.message = message;
+    this.body = body;
+  }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+  public String getType() {
+    return type;
+  }
 
-    public T getBody() {
-        return body;
-    }
+  public void setType(String type) {
+    this.type = type;
+  }
 
-    public void setBody(T body) {
-        this.body = body;
-    }
+  public int getRpta() {
+    return rpta;
+  }
+
+  public void setRpta(int rpta) {
+    this.rpta = rpta;
+  }
+
+  public String getMessage() {
+    return message;
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public T getBody() {
+    return body;
+  }
+
+  public void setBody(T body) {
+    this.body = body;
+  }
 }

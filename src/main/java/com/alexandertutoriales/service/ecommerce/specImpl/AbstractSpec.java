@@ -1,6 +1,7 @@
 package com.alexandertutoriales.service.ecommerce.specImpl;
 
 import java.util.List;
+
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
@@ -11,7 +12,10 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 public class AbstractSpec {
-  /** The Constant M_ID. */
+
+  /**
+   * The Constant M_ID.
+   */
   protected static final String M_ID = "id";
 
   @SuppressWarnings("unchecked")
@@ -26,9 +30,7 @@ public class AbstractSpec {
       } else {
         join = ((Join<T, U>) object).join(field, joinType);
       }
-    }
-
-    else {
+    } else {
       Fetch<U, V> fetch;
       if (object instanceof Root<?>) {
         fetch = ((Root<U>) object).fetch(field, joinType);
@@ -42,10 +44,9 @@ public class AbstractSpec {
   }
 
   /**
-   * Add to the CriteriaBuilder a list of predicates collected by the AND
-   * operator.
+   * Add to the CriteriaBuilder a list of predicates collected by the AND operator.
    *
-   * @param cb         the cb
+   * @param cb the cb
    * @param conditions the conditions
    * @return the predicate
    */
@@ -56,7 +57,7 @@ public class AbstractSpec {
   /**
    * Add to the CriteriaBuilder a list of predicates collected by the OR operator.
    *
-   * @param cb         the cb
+   * @param cb the cb
    * @param conditions the conditions
    * @return the predicate
    */
@@ -67,8 +68,8 @@ public class AbstractSpec {
   /**
    * Like operation to find a substring in the database.
    *
-   * @param cb      the cb
-   * @param value   the value
+   * @param cb the cb
+   * @param value the value
    * @param pattern the patern
    * @return the predicate
    */

@@ -2,18 +2,18 @@ package com.alexandertutoriales.service.ecommerce.mapperImpl;
 
 import java.util.List;
 import java.util.Set;
+
 import org.springframework.data.domain.Page;
 
 /**
- * Mapper genérico con las operaciones básicas de transformación entre entidades
- * y DTOs, incluyendo List y Page.
+ * Mapper genérico con las operaciones básicas de transformación entre entidades y DTOs, incluyendo List y Page.
  *
  * @param <D> - DTO type parameter.
  * @param <E> - Entity type parameter.
- *
  * @author Dagner Anibal Chúman Lluen.
  */
 public interface GenericMapper<D, E> {
+
   /**
    * To entity.
    *

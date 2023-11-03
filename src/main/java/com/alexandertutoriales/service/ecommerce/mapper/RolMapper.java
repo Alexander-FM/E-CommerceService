@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface RolMapper extends GenericMapper<RolDto, Rol> {
+
   @Override
   RolDto toDto(Rol rol);
 

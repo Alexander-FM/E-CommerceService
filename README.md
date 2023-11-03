@@ -1,7 +1,10 @@
 # Servicio de Ecommerce con Spring Boot
-Este proyecto es un servicio de comercio electrónico desarrollado en Spring Boot que utiliza diversas tecnologías como Java 8, Web Sockets, JasperReports, MySQL y Firebase Cloud Messaging para proporcionar funcionalidades avanzadas.
+
+Este proyecto es un servicio de comercio electrónico desarrollado en Spring Boot que utiliza diversas tecnologías como Java 8, Web Sockets,
+JasperReports, MySQL y Firebase Cloud Messaging para proporcionar funcionalidades avanzadas.
 
 # Requisitos
+
 Asegúrate de tener instalados los siguientes componentes:
 
 * Java 8
@@ -10,7 +13,9 @@ Asegúrate de tener instalados los siguientes componentes:
 * JasperReports (para generación de informes)
 
 # Configuración
+
 ## Base de Datos
+
 Crea una base de datos MySQL e importa el script de base de datos proporcionado en bd_ecommerce.sql.
 
 Configura las credenciales de la base de datos en el archivo src/main/resources/application.properties.
@@ -20,32 +25,45 @@ Configura las credenciales de la base de datos en el archivo src/main/resources/
   spring.datasource.username=tu_usuario
   spring.datasource.password=tu_contraseña
 ```
+
 ## Firebase Cloud Messaging
+
 Obtén las credenciales de Firebase y configúralas en el archivo src/main/resources/application.properties.
 
 ```bash
   firebase.api.key=tu_api_key
   firebase.project.id=tu_project_id
 ```
+
 ## WebSockets
-En este proyecto, utilizamos WebSockets para enviar notificaciones en tiempo real a la aplicación web cuando se registra una compra desde el aplicativo móvil.
+
+En este proyecto, utilizamos WebSockets para enviar notificaciones en tiempo real a la aplicación web cuando se registra una compra desde el
+aplicativo móvil.
+
 ## JasperReports
+
 Asegúrate de tener JasperStudio correctamente instalado y configurado en tu sistema por si deseas agregar más reportes.
 
 # Ejecución
-Para ejecutar el servicio, simplemente ejecuta el siguiente comando en la raíz del proyecto: 
+
+Para ejecutar el servicio, simplemente ejecuta el siguiente comando en la raíz del proyecto:
 
 ```bash
   mvn spring-boot:run
 ```
-Pero antes de todo, recomendamos hacer un clean install para que asegurarte de que los mappers generados estén actualizados y correctamente incorporados en la aplicación.
+
+Pero antes de todo, recomendamos hacer un clean install para que asegurarte de que los mappers generados estén actualizados y correctamente
+incorporados en la aplicación.
+
 ```bash
   mvn clean
   mvn install
 ```
 
 # Uso
-El servicio proporciona una API REST documentada con Swagger. Puedes acceder a la documentación en: [documentation.local.](http://localhost:8080/swagger-ui.html)
+
+El servicio proporciona una API REST documentada con Swagger. Puedes acceder a la documentación
+en: [documentation.local.](http://localhost:8080/swagger-ui.html)
 
 # Pantallazos
 
@@ -54,6 +72,7 @@ El servicio proporciona una API REST documentada con Swagger. Puedes acceder a l
 ![Navegador](https://lh3.googleusercontent.com/pw/ADCreHfF95dr0UELC-3BTDXmsngu-Bq5LK4uGYSTfyKIBUij4fn3jWxoghpP2ZGdNgmfWDmDoGEJhFG9dre_9VFmMWsuNiK10roaJPjkw9yX4icblF4uRq3bE3A8p4G5sONWEcM3txbZyFYVEiE6_V6STCUolvyM4288WTyLFfmISXgycfimT6LDz0KhBEwiTM8tdnzRJ-CMNmdkR_nYstUsu-Ur3CcmuLfshsBOZYzuhgrN02ecaS02bXVTz0N4y3bAYJmpZK3F2RJgX7G6zQK5PLA0Vio5s04CTcVLI7Fr3CUhbAvA1YmawZSQY69nkVsTsphHGo5CIGd5VQuvEahhMgofYvkklS4qWswANdn_zC0dxwuNS1h91VbW133o_XxmkX2wmuCtl0EnYIYn4CmkdkuY-fvoDFnnSeTL2OggzTCwHUaxubMbjdM350tAuryQuoqeTFb8fmBwNWlCT8nuThts3mzYOlSIOQH2vaf3s0wZaBx4XJtHRuinB0taaf2k0yIwC5dFoxdRYPXc7oiCgO6mueMV80MoMpP2a284pyzzWM-P6BsCtawdrN7CgeldorW4wZSFZ1HTKyQDOzK4xGd4FNebWHbGwHUUYF5U622Oreg5-ehkewG_IroE5J8rWPLvPhYme4MPN7yOYXFdgNmoUZAlDd1DqEyY5Qz3jvJDrrZ3zK5yRM7ueo8PyyX_jmMasigaehSVCkX7H4RSJM7GY4vmy7ZFhfprl18-bDw3FVMZpgiIeVK-Sm4BGXgWKulwoFOrp6ZpWO757lW-kmGwtIcN4yxAU3ogG1EPUM20qVowvcSxaQP4iIXGBXFcu2Ee2pe4ZBFchKYFaPsK1K71_1spWZdkjhZEOD9lw-WgI8nN9fk1LZXm_zIVoalAGrax-EHde0YsmLvKZLlTWIM=w613-h161-s-no-gm?authuser=0)
 
 # Contribución
+
 Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
 
 1. Crea un fork del repositorio.
@@ -63,6 +82,7 @@ Si deseas contribuir a este proyecto, por favor sigue los siguientes pasos:
 5. Crea un pull request en GitHub.
 
 # Licencia
+
 Este proyecto está bajo la licencia de MIT. Consulta el archivo LICENSE para más detalles
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)

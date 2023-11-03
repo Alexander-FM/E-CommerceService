@@ -10,25 +10,35 @@ import javax.persistence.Transient;
 
 @Entity
 public class Empleado {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   @Column(length = 100)
   private String nombre;
+
   @Column(length = 100)
   private String apellidos;
+
   @Column
   private boolean vigencia;
+
   @Column(length = 3)
   private String tipo_documento;
+
   @Column(length = 11)
   private String numero_documento;
+
   @Column(length = 50)
   private String username;
+
   @Column(length = 10)
   private String password;
+
   @OneToOne
   private Rol rol;
+
   @Transient
   private String vigenciaString;
 
