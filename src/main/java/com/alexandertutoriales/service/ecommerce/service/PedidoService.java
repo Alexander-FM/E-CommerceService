@@ -135,7 +135,7 @@ public class PedidoService {
   @NotNull
   public ResponseEntity<Resource> exportInvoice(int idCli, int idOrden) {
     Optional<Pedido> optPedido = this.repository.findByIdAndClienteId(idCli, idOrden);
-    Double rpta = this.detallePedidoRepository.totalByIdCustomer(idCli);
+    Double rpta = this.detallePedidoRepository.totalByIdCustomer(idCli, idOrden);
     if (optPedido.isPresent()) {
       try {
         final Pedido pedido = optPedido.get();

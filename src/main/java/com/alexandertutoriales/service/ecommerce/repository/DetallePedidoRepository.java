@@ -12,6 +12,6 @@ public interface DetallePedidoRepository extends CrudRepository<DetallePedido, I
   //Consultar el total de compras
   @Query(value = "SELECT SUM(dp.cantidad * dp.precio) AS \"Total\" FROM detalle_pedido dp JOIN pedido p\n" +
       "ON P.id = dp.pedido_id\n" +
-      "WHERE p.cliente_id =:idCli AND p.anular_pedido = 0", nativeQuery = true)
-  Double totalByIdCustomer(int idCli);
+      "WHERE p.cliente_id =:idCli AND p.anular_pedido = 0 AND p.id =:idPedido", nativeQuery = true)
+  Double totalByIdCustomer(int idCli, int idPedido);
 }
