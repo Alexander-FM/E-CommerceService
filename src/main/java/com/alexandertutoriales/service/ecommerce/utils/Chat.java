@@ -10,6 +10,8 @@ public class Chat {
 
   private String image;
 
+  private String fechaHora;
+
   public String getSender() {
     return sender;
   }
@@ -40,5 +42,13 @@ public class Chat {
 
   public void setImage(String image) {
     this.image = image;
+  }
+
+  public String getFechaHora() {
+    return fechaHora;
+  }
+
+  public void setFechaHora(String fechaHora) {
+    this.fechaHora = fechaHora;
   }
 }
