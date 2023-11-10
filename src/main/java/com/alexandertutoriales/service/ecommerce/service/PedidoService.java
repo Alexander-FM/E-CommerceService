@@ -135,7 +135,8 @@ public class PedidoService {
   @NotNull
   public ResponseEntity<Resource> exportInvoice(int idCli, int idOrden) {
     Optional<Pedido> optPedido = this.repository.findByIdAndClienteId(idCli, idOrden);
-    Double rpta = this.detallePedidoRepository.totalByIdCustomer(idCli, idOrden);
+    Double total = this.detallePedidoRepository.totalByIdCustomer(idCli, idOrden);
+    Double igv = calcularPorcentaje(total, 18);
     if (optPedido.isPresent()) {
       try {
         final Pedido pedido = optPedido.get();
@@ -145,11 +146,13 @@ public class PedidoService {
 
         Locale locale = new Locale("es", "PE"); // Especifica el idioma y país según tu preferencia
         NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(locale);
-        String formattedTotal = currencyFormatter.format(rpta);
+        String formattedTotal = currencyFormatter.format(total);
+        String formattedIGV = currencyFormatter.format(igv);
         final HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("nombreCliente", pedido.getCliente().getNombreCompletoCliente());
         parameters.put("imgLogo", new FileInputStream(imgLogo));
         parameters.put("total", formattedTotal);
+        parameters.put("igv", formattedIGV);
         parameters.put("dsInvoice", new JRBeanCollectionDataSource((Collection<?>) this.detallePedidoRepository.findByPedido(idOrden)));
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
@@ -173,5 +176,9 @@ public class PedidoService {
       return ResponseEntity.noContent().build();//No se encontro el contenido
     }
     return null;
+  }
+
+  public static Double calcularPorcentaje(final Double precio, final Integer porcentaje) {
+    return (precio * porcentaje) / 100.0;
   }
 }
