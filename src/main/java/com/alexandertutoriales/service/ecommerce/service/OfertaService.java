@@ -7,6 +7,7 @@ import static com.alexandertutoriales.service.ecommerce.utils.Global.TIPO_DATA;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class OfertaService {
     if (BooleanUtils.isFalse(ofertasActivas.isEmpty())) {
       return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, ofertasActivas);
     } else {
-      return new GenericResponse(TIPO_DATA, RPTA_WARNING, OPERACION_CORRECTA, "No hay ofertas por el momento");
+      return new GenericResponse(TIPO_DATA, RPTA_WARNING, OPERACION_CORRECTA, new ArrayList<>());
     }
   }
 }
