@@ -88,9 +88,8 @@ public class PedidoService {
       dp.setPedido(dto.getPedido());
       this.pRepository.descontarStock(dp.getCantidad(), dp.getPlatillo().getId());
     }
-    //Llamamos al servicio de Detalle Venta para guardar los respectivos detalles del pedido.
     this.dpService.guardarDetalles(dto.getDetallePedido());
-    template.convertAndSend("/topic/pedido-notification", dto);
+    this.template.convertAndSend("/topic/pedido-notification", dto);
     return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
   }
 
