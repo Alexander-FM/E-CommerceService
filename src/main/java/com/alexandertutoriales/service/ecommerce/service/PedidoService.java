@@ -18,12 +18,15 @@ import java.util.Optional;
 
 import com.alexandertutoriales.service.ecommerce.entity.DetallePedido;
 import com.alexandertutoriales.service.ecommerce.entity.Pedido;
+import com.alexandertutoriales.service.ecommerce.entity.Usuario;
 import com.alexandertutoriales.service.ecommerce.entity.dto.GenerarPedidoDTO;
 import com.alexandertutoriales.service.ecommerce.entity.dto.PedidoConDetallesDTO;
 import com.alexandertutoriales.service.ecommerce.repository.DetallePedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PlatilloRepository;
+import com.alexandertutoriales.service.ecommerce.repository.UsuarioRepository;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
+import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
 import net.sf.jasperreports.engine.JREmptyDataSource;
@@ -39,6 +42,8 @@ import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
@@ -53,17 +58,24 @@ public class PedidoService {
 
   private final DetallePedidoService dpService;
 
-  private final PlatilloRepository pRepository;
+  private final PlatilloRepository platilloRepository;
 
   private final SimpMessagingTemplate template;
 
+  private final JavaMailSender javaMailSender;
+
+  private final UsuarioRepository usuarioRepository;
+
   public PedidoService(PedidoRepository repository, DetallePedidoRepository detallePedidoRepository, DetallePedidoService dpService,
-      PlatilloRepository pRepository, SimpMessagingTemplate template) {
+      PlatilloRepository platilloRepository, SimpMessagingTemplate template, JavaMailSender javaMailSender,
+      UsuarioRepository usuarioRepository) {
     this.repository = repository;
     this.detallePedidoRepository = detallePedidoRepository;
     this.dpService = dpService;
-    this.pRepository = pRepository;
+    this.platilloRepository = platilloRepository;
     this.template = template;
+    this.javaMailSender = javaMailSender;
+    this.usuarioRepository = usuarioRepository;
   }
 
   //Método para devolver los pedidos con detalles
@@ -86,7 +98,7 @@ public class PedidoService {
     this.repository.save(dto.getPedido());
     for (DetallePedido dp : dto.getDetallePedido()) {
       dp.setPedido(dto.getPedido());
-      this.pRepository.descontarStock(dp.getCantidad(), dp.getPlatillo().getId());
+      this.platilloRepository.descontarStock(dp.getCantidad(), dp.getPlatillo().getId());
     }
     this.dpService.guardarDetalles(dto.getDetallePedido());
     this.template.convertAndSend("/topic/pedido-notification", dto);
@@ -127,7 +139,7 @@ public class PedidoService {
   private void restablecerStock(final int pedidoId) {
     Iterable<DetallePedido> detalles = this.detallePedidoRepository.findByPedido(pedidoId);
     for (DetallePedido dp : detalles) {
-      pRepository.aumentarStock(dp.getCantidad(), dp.getPlatillo().getId());
+      platilloRepository.aumentarStock(dp.getCantidad(), dp.getPlatillo().getId());
     }
   }
 
@@ -165,6 +177,7 @@ public class PedidoService {
                 .toString()).build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(contentDisposition);
+        sendInvoiceByEmail(pedido, reporte);
         return ResponseEntity.ok().contentLength((long) reporte.length)
             .contentType(MediaType.APPLICATION_PDF)
             .headers(headers).body(new ByteArrayResource(reporte));
@@ -179,5 +192,29 @@ public class PedidoService {
 
   public static Double calcularPorcentaje(final Double precio, final Integer porcentaje) {
     return (precio * porcentaje) / 100.0;
+  }
+
+  private void sendInvoiceByEmail(Pedido pedido, byte[] reporte) {
+    try {
+      MimeMessage message = javaMailSender.createMimeMessage();
+      MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+      Optional<Usuario> usuario = usuarioRepository.findUsuarioByClienteId(pedido.getCliente().getId());
+      if (usuario.isPresent()) {
+        helper.setTo(usuario.get().getEmail());
+      } else {
+        helper.setTo("correoinvalid@gmail.com");
+      }
+      helper.setSubject("Factura de compra");
+      // Puedes agregar el cuerpo del correo electrónico si es necesario
+      helper.setText("Gracias por su compra. Adjuntamos la factura correspondiente.");
+      // Adjunta el informe PDF
+      helper.addAttachment("invoice.pdf", new ByteArrayResource(reporte));
+
+      javaMailSender.send(message);
+    } catch (Exception e) {
+      e.printStackTrace();
+      // Manejar la excepción de envío de correo electrónico según tus necesidades
+    }
   }
 }
