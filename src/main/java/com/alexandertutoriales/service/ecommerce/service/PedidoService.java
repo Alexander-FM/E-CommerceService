@@ -4,6 +4,7 @@ import static com.alexandertutoriales.service.ecommerce.utils.Global.OPERACION_C
 import static com.alexandertutoriales.service.ecommerce.utils.Global.RPTA_OK;
 import static com.alexandertutoriales.service.ecommerce.utils.Global.TIPO_DATA;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.text.NumberFormat;
@@ -14,6 +15,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.alexandertutoriales.service.ecommerce.entity.DetallePedido;
@@ -26,6 +28,9 @@ import com.alexandertutoriales.service.ecommerce.repository.PedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PlatilloRepository;
 import com.alexandertutoriales.service.ecommerce.repository.UsuarioRepository;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
+import com.lowagie.text.pdf.PdfReader;
+import com.lowagie.text.pdf.PdfStamper;
+import com.lowagie.text.pdf.PdfWriter;
 import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
@@ -47,7 +52,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
+import org.springframework.util.StreamUtils;
 
+/**
+ * The type Pedido service.
+ */
 @Service
 @Transactional
 public class PedidoService {
@@ -66,6 +75,17 @@ public class PedidoService {
 
   private final UsuarioRepository usuarioRepository;
 
+  /**
+   * Instantiates a new Pedido service.
+   *
+   * @param repository the repository
+   * @param detallePedidoRepository the detalle pedido repository
+   * @param dpService the dp service
+   * @param platilloRepository the platillo repository
+   * @param template the template
+   * @param javaMailSender the java mail sender
+   * @param usuarioRepository the usuario repository
+   */
   public PedidoService(PedidoRepository repository, DetallePedidoRepository detallePedidoRepository, DetallePedidoService dpService,
       PlatilloRepository platilloRepository, SimpMessagingTemplate template, JavaMailSender javaMailSender,
       UsuarioRepository usuarioRepository) {
@@ -78,7 +98,12 @@ public class PedidoService {
     this.usuarioRepository = usuarioRepository;
   }
 
-  //Método para devolver los pedidos con detalles
+  /**
+   * Devolver mis compras.
+   *
+   * @param idCli the id cli
+   * @return the generic response
+   */
   public GenericResponse<List<PedidoConDetallesDTO>> devolverMisCompras(int idCli) {
     final List<PedidoConDetallesDTO> dtos = new ArrayList<>();
     final Iterable<Pedido> pedidos = repository.devolverMisCompras(idCli);
@@ -88,41 +113,36 @@ public class PedidoService {
     return new GenericResponse(OPERACION_CORRECTA, RPTA_OK, "Petición encontrada", dtos);
   }
 
-  //Método para guardar el pedido.
+  /**
+   * Guardar pedido.
+   *
+   * @param dto the dto
+   * @return the generic response
+   */
   public GenericResponse guardarPedido(GenerarPedidoDTO dto) {
     Date date = new Date();
     dto.getPedido().setFechaCompra(new java.sql.Date(date.getTime()));
     dto.getPedido().setAnularPedido(false);
     dto.getPedido().setMonto(dto.getPedido().getMonto());
     dto.getPedido().setCliente(dto.getCliente());
-    this.repository.save(dto.getPedido());
+    final Pedido pedidoGuardado = this.repository.save(dto.getPedido());
     for (DetallePedido dp : dto.getDetallePedido()) {
       dp.setPedido(dto.getPedido());
       this.platilloRepository.descontarStock(dp.getCantidad(), dp.getPlatillo().getId());
     }
     this.dpService.guardarDetalles(dto.getDetallePedido());
     this.template.convertAndSend("/topic/pedido-notification", dto);
+    ResponseEntity<Resource> reporte = exportInvoice(pedidoGuardado.getCliente().getId(), pedidoGuardado.getId());
+    sendInvoiceByEmail(pedidoGuardado, reporte);
     return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
   }
 
-  //Otra manera de hacer el guardarPedido con la instancia de la clase pedido
-  public GenericResponse guardarPedido2(GenerarPedidoDTO dto) {
-    Date date = new Date();
-    Pedido p = new Pedido();
-    p.setFechaCompra(new java.sql.Date(date.getTime()));
-    p.setAnularPedido(false);
-    p.setMonto(dto.getPedido().getMonto());
-    p.setCliente(dto.getCliente());
-    p = this.repository.save(p); //Guarda los datos de la venta en la tabla de bd
-    for (DetallePedido dp :
-        dto.getDetallePedido()) {
-      dp.setPedido(p);
-    }
-    this.dpService.guardarDetalles(dto.getDetallePedido());
-    return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
-  }
-
-  //Método para anular el pedido
+  /**
+   * Anular pedido.
+   *
+   * @param id the id
+   * @return the generic response
+   */
   public GenericResponse anular(int id) {
     Pedido p = this.repository.findById(id).orElse(new Pedido());
     if (p.getId() != 0) {
@@ -131,11 +151,15 @@ public class PedidoService {
       this.repository.save(p);
       return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, p);
     } else {
-      return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA,
-          "El pedido que desea anular no es válido");
+      return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, "El pedido que desea anular no es válido");
     }
   }
 
+  /**
+   * Restablecer stock.
+   *
+   * @param pedidoId the pedido.
+   */
   private void restablecerStock(final int pedidoId) {
     Iterable<DetallePedido> detalles = this.detallePedidoRepository.findByPedido(pedidoId);
     for (DetallePedido dp : detalles) {
@@ -143,6 +167,13 @@ public class PedidoService {
     }
   }
 
+  /**
+   * Exportar reporte.
+   *
+   * @param idCli the id cli
+   * @param idOrden the id orden
+   * @return the response entity
+   */
   @NotNull
   public ResponseEntity<Resource> exportInvoice(int idCli, int idOrden) {
     Optional<Pedido> optPedido = this.repository.findByIdAndClienteId(idCli, idOrden);
@@ -171,30 +202,38 @@ public class PedidoService {
         String sdf = (new SimpleDateFormat("dd/MM/yyyy")).format(new Date());
         StringBuilder var1 = new StringBuilder().append("invoicePDF:");
         ContentDisposition contentDisposition = ContentDisposition.builder("attachment")
-            .filename(var1.append(pedido.getId())
-                .append("generatedate:")
-                .append(sdf).append(".pdf")
-                .toString()).build();
+            .filename(var1.append(pedido.getId()).append("generatedate:").append(sdf).append(".pdf").toString()).build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(contentDisposition);
-        sendInvoiceByEmail(pedido, reporte);
-        return ResponseEntity.ok().contentLength((long) reporte.length)
-            .contentType(MediaType.APPLICATION_PDF)
-            .headers(headers).body(new ByteArrayResource(reporte));
+        return ResponseEntity.ok().contentLength((long) reporte.length).contentType(MediaType.APPLICATION_PDF).headers(headers)
+            .body(new ByteArrayResource(reporte));
       } catch (Exception e) {
         e.printStackTrace();
       }
     } else {
-      return ResponseEntity.noContent().build();//No se encontro el contenido
+      return ResponseEntity.noContent().build(); //No se encontró el contenido
     }
-    return null;
+    return ResponseEntity.noContent().build();
   }
 
+  /**
+   * Calcular porcentaje.
+   *
+   * @param precio the precio
+   * @param porcentaje the porcentaje
+   * @return the double
+   */
   public static Double calcularPorcentaje(final Double precio, final Integer porcentaje) {
     return (precio * porcentaje) / 100.0;
   }
 
-  private void sendInvoiceByEmail(Pedido pedido, byte[] reporte) {
+  /**
+   * Enviar reporte por correo.
+   *
+   * @param pedido the pedido
+   * @param facturaPDF the factura pdf
+   */
+  private void sendInvoiceByEmail(Pedido pedido, ResponseEntity<Resource> facturaPDF) {
     try {
       MimeMessage message = javaMailSender.createMimeMessage();
       MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -202,19 +241,54 @@ public class PedidoService {
       Optional<Usuario> usuario = usuarioRepository.findUsuarioByClienteId(pedido.getCliente().getId());
       if (usuario.isPresent()) {
         helper.setTo(usuario.get().getEmail());
-      } else {
-        helper.setTo("correoinvalid@gmail.com");
+        helper.setSubject("Factura de compra");
+        String mensaje = "Hola, " + pedido.getCliente().getNombreCompletoCliente()
+            + "\nGracias por su compra."
+            + "\nAdjuntamos la factura correspondiente."
+            + "\nPor tu seguridad, el PDF de tu factura está encriptado, al momento de abrirlo introduce tu número de documento de "
+            + "identidad con el que te registraste.";
+        helper.setText(mensaje);
+        byte[] pdfBytes = StreamUtils.copyToByteArray(Objects.requireNonNull(facturaPDF.getBody()).getInputStream());
+        String dni = pedido.getCliente().getNumDoc();
+        String nombreArchivo = buildCustomFileName(pedido);
+        helper.addAttachment(nombreArchivo, new ByteArrayResource(encryptPdf(pdfBytes, dni)));
       }
-      helper.setSubject("Factura de compra");
-      // Puedes agregar el cuerpo del correo electrónico si es necesario
-      helper.setText("Gracias por su compra. Adjuntamos la factura correspondiente.");
-      // Adjunta el informe PDF
-      helper.addAttachment("invoice.pdf", new ByteArrayResource(reporte));
-
       javaMailSender.send(message);
     } catch (Exception e) {
       e.printStackTrace();
       // Manejar la excepción de envío de correo electrónico según tus necesidades
     }
+  }
+
+  /**
+   * Encriptar el PDF.
+   *
+   * @param pdfBytes the pedido
+   * @param password the factura pdf
+   */
+  private byte[] encryptPdf(byte[] pdfBytes, String password) throws Exception {
+    PdfReader reader = new PdfReader(pdfBytes);
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    PdfStamper stamper = new PdfStamper(reader, baos);
+    stamper.setEncryption(password.getBytes(), password.getBytes(),
+        PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128);
+    stamper.close();
+    reader.close();
+    return baos.toByteArray();
+  }
+
+  /**
+   * Construye un nombre personalizado para el reporte.
+   *
+   * @param pedido the pedido
+   */
+  private String buildCustomFileName(Pedido pedido) {
+    String idCompra = "C" + String.format("%04d", pedido.getId()); // Formato CXXX (donde XXX es el id de la compra)
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
+    String fechaCompra = dateFormat.format(pedido.getFechaCompra());
+
+    // Construir el nombre del archivo PDF
+    return "factura" + idCompra + "_" + fechaCompra + ".pdf";
   }
 }
