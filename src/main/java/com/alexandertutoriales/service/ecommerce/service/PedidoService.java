@@ -23,6 +23,7 @@ import com.alexandertutoriales.service.ecommerce.entity.Pedido;
 import com.alexandertutoriales.service.ecommerce.entity.Usuario;
 import com.alexandertutoriales.service.ecommerce.entity.dto.GenerarPedidoDTO;
 import com.alexandertutoriales.service.ecommerce.entity.dto.PedidoConDetallesDTO;
+import com.alexandertutoriales.service.ecommerce.publisher.Publisher;
 import com.alexandertutoriales.service.ecommerce.repository.DetallePedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PlatilloRepository;
@@ -34,6 +35,7 @@ import com.lowagie.text.pdf.PdfWriter;
 import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
 import javax.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.JREmptyDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -57,6 +59,7 @@ import org.springframework.util.StreamUtils;
 /**
  * The type Pedido service.
  */
+@Slf4j
 @Service
 @Transactional
 public class PedidoService {
@@ -75,20 +78,23 @@ public class PedidoService {
 
   private final UsuarioRepository usuarioRepository;
 
+  private final Publisher publisher;
+
   /**
    * Instantiates a new Pedido service.
    *
-   * @param repository the repository
-   * @param detallePedidoRepository the detalle pedido repository
-   * @param dpService the dp service
-   * @param platilloRepository the platillo repository
-   * @param template the template
-   * @param javaMailSender the java mail sender
-   * @param usuarioRepository the usuario repository
+   * @param repository the repository.
+   * @param detallePedidoRepository the detalle pedido repository.
+   * @param dpService the dp service.
+   * @param platilloRepository the platillo repository.
+   * @param template the template.
+   * @param javaMailSender the java mail sender.
+   * @param usuarioRepository the usuario repository.
+   * @param publisher the publisher.
    */
   public PedidoService(PedidoRepository repository, DetallePedidoRepository detallePedidoRepository, DetallePedidoService dpService,
       PlatilloRepository platilloRepository, SimpMessagingTemplate template, JavaMailSender javaMailSender,
-      UsuarioRepository usuarioRepository) {
+      UsuarioRepository usuarioRepository, Publisher publisher) {
     this.repository = repository;
     this.detallePedidoRepository = detallePedidoRepository;
     this.dpService = dpService;
@@ -96,6 +102,7 @@ public class PedidoService {
     this.template = template;
     this.javaMailSender = javaMailSender;
     this.usuarioRepository = usuarioRepository;
+    this.publisher = publisher;
   }
 
   /**
@@ -125,6 +132,9 @@ public class PedidoService {
     dto.getPedido().setAnularPedido(false);
     dto.getPedido().setMonto(dto.getPedido().getMonto());
     dto.getPedido().setCliente(dto.getCliente());
+    //log.info("Message '{}' will be send ... ", dto);
+    System.out.println("Message '{}' will be send" + dto);
+    this.publisher.send(dto);
     final Pedido pedidoGuardado = this.repository.save(dto.getPedido());
     for (DetallePedido dp : dto.getDetallePedido()) {
       dp.setPedido(dto.getPedido());
