@@ -1,5 +1,6 @@
 package com.alexandertutoriales.service.ecommerce.publisher;
 
+import com.alexandertutoriales.service.ecommerce.entity.dto.GenerarPedidoDTO;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -27,9 +28,9 @@ public class Publisher {
   /**
    * Envía un mensaje a la cola. Este método se puede utilizar en cualquier clase donde queramos
    * enviar un mensaje a dicha cola.
-   * @param object the object.
+   * @param generarPedidoDTO the generar pedido dto.
    */
-  public void send(final Object object) {
-    rabbitTemplate.convertAndSend(queue.getName(), object);
+  public void send(final GenerarPedidoDTO generarPedidoDTO) {
+    rabbitTemplate.convertAndSend(queue.getName(), generarPedidoDTO);
   }
 }

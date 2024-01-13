@@ -1,5 +1,7 @@
 package com.alexandertutoriales.service.ecommerce.entity;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,7 @@ import javax.persistence.Transient;
 import org.springframework.web.multipart.MultipartFile;
 
 @Entity
-public class DocumentoAlmacenado {
+public class DocumentoAlmacenado implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

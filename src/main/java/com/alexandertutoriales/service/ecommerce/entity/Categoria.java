@@ -1,5 +1,7 @@
 package com.alexandertutoriales.service.ecommerce.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,7 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 @Entity
-public class Categoria {
+public class Categoria implements Serializable {
 
   public static final String C_NOMBRE = "nombre";
 

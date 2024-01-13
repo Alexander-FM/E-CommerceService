@@ -1,5 +1,6 @@
 package com.alexandertutoriales.service.ecommerce.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -11,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class Pedido {
+public class Pedido implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

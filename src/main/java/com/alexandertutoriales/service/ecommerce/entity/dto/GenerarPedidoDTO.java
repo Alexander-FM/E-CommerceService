@@ -1,11 +1,13 @@
 package com.alexandertutoriales.service.ecommerce.entity.dto;
 
+import java.io.Serializable;
+
 import com.alexandertutoriales.service.ecommerce.entity.Cliente;
 import com.alexandertutoriales.service.ecommerce.entity.DetallePedido;
 import com.alexandertutoriales.service.ecommerce.entity.Pedido;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class GenerarPedidoDTO {
+public class GenerarPedidoDTO implements Serializable {
 
   private Pedido pedido;
 

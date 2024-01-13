@@ -1,5 +1,7 @@
 package com.alexandertutoriales.service.ecommerce.entity;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class DetallePedido {
+public class DetallePedido implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
