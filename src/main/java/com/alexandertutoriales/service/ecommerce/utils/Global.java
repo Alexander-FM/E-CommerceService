@@ -1,7 +1,6 @@
 package com.alexandertutoriales.service.ecommerce.utils;
 
 public class Global {
-
   public enum Estado {
     A,
     I
@@ -25,5 +24,5 @@ public class Global {
 
   public static final String OPERACION_ERRONEA = "Ha ocurrido un error al realizar la operación";
 
-  public static final String AUTH_SECRET = "serviciosweb2";
+  public static final String STOCK_INSUFICIENTE = "Ups, no hay stock suficiente de algunos productos de tu carrito";
 }

@@ -2,8 +2,11 @@ package com.alexandertutoriales.service.ecommerce.service;
 
 import static com.alexandertutoriales.service.ecommerce.utils.Global.OPERACION_CORRECTA;
 import static com.alexandertutoriales.service.ecommerce.utils.Global.OPERACION_ERRONEA;
+import static com.alexandertutoriales.service.ecommerce.utils.Global.OPERACION_INCORRECTA;
 import static com.alexandertutoriales.service.ecommerce.utils.Global.RPTA_ERROR;
 import static com.alexandertutoriales.service.ecommerce.utils.Global.RPTA_OK;
+import static com.alexandertutoriales.service.ecommerce.utils.Global.RPTA_WARNING;
+import static com.alexandertutoriales.service.ecommerce.utils.Global.STOCK_INSUFICIENTE;
 import static com.alexandertutoriales.service.ecommerce.utils.Global.TIPO_DATA;
 
 import java.io.ByteArrayOutputStream;
@@ -30,6 +33,7 @@ import com.alexandertutoriales.service.ecommerce.repository.DetallePedidoReposit
 import com.alexandertutoriales.service.ecommerce.repository.PedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PlatilloRepository;
 import com.alexandertutoriales.service.ecommerce.repository.UsuarioRepository;
+import com.alexandertutoriales.service.ecommerce.utils.ErrorResponse;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
@@ -137,18 +141,26 @@ public class PedidoService {
       if (dto == null || dto.getPedido().getCliente() == null || dto.getDetallePedido() == null) {
         throw new IllegalArgumentException(MESSAGE_DTO_IS_NULL);
       }
-      log.info("Message '{}' will be send ... ", dto);
-      this.publisher.send(dto);
-      this.repository.save(dto.getPedido());
+      boolean hayStockSuficiente = false;
       for (DetallePedido dp : dto.getDetallePedido()) {
-        dp.setPedido(dto.getPedido());
-        this.platilloRepository.descontarStock(dp.getCantidad(), dp.getPlatillo().getId());
+        hayStockSuficiente = this.platilloRepository.hayStockSuficiente(dp.getCantidad(), dp.getPlatillo().getId());
       }
-      this.dpService.guardarDetalles(dto.getDetallePedido());
-      this.template.convertAndSend(WEB_SOCKET, dto);
-      // ResponseEntity<Resource> reporte = exportInvoice(dto.getPedido().getCliente().getId(), dto.getPedido().getId());
-      // sendInvoiceByEmail(dto.getPedido(), reporte);
-      return new GenericResponse<>(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
+      if (hayStockSuficiente) {
+        log.info("Message '{}' will be send ... ", dto.getPedido().getCliente().getNombreCompletoCliente());
+        this.publisher.send(dto);
+        this.repository.save(dto.getPedido());
+        for (DetallePedido dp : dto.getDetallePedido()) {
+          dp.setPedido(dto.getPedido());
+          this.platilloRepository.descontarStock(dp.getCantidad(), dp.getPlatillo().getId());
+        }
+        this.dpService.guardarDetalles(dto.getDetallePedido());
+        this.template.convertAndSend(WEB_SOCKET, dto);
+        // ResponseEntity<Resource> reporte = exportInvoice(dto.getPedido().getCliente().getId(), dto.getPedido().getId());
+        // sendInvoiceByEmail(dto.getPedido(), reporte);
+        return new GenericResponse<>(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
+      } else {
+        return new GenericResponse(TIPO_DATA, RPTA_WARNING, OPERACION_INCORRECTA, new ErrorResponse(STOCK_INSUFICIENTE));
+      }
     } catch (Exception e) {
       return new GenericResponse<>(TIPO_DATA, RPTA_ERROR, OPERACION_ERRONEA, null);
     }

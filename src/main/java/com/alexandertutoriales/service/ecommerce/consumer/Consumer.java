@@ -23,11 +23,11 @@ public class Consumer {
   }
 
   /**
-   * Ejecutar cada 5 milisegundos.
+   * Ejecutar cada 1.5 minutos.
    */
   private void makeSlow() {
     try {
-      Thread.sleep(5000);
+      Thread.sleep(15000);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

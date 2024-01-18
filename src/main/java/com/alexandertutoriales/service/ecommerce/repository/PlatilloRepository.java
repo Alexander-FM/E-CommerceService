@@ -21,4 +21,8 @@ public interface PlatilloRepository extends CrudRepository<Platillo, Integer> {
   @Query("UPDATE Platillo P SET P.stock=P.stock+:cant WHERE P.id=:id")
   void aumentarStock(int cant, int id);
 
+  @Query("SELECT CASE WHEN P.stock >= :cantidadRequerida THEN true ELSE false END "
+      + "FROM Platillo P WHERE P.id = :productId")
+  boolean hayStockSuficiente(int cantidadRequerida, int productId);
+
 }
