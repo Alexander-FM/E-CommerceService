@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class Consumer {
-
   /**
    * Permite pasar una coleccion de colas que son todas aquellas colas que nuestro consumidor estará escuchando en RabbitMQ. De momento solo
    * tenemos una cola en nuestro application.propiertes.
@@ -18,8 +17,8 @@ public class Consumer {
    */
   @RabbitListener(queues = {"${ecommerce.queue.name}"})
   public void receive(@Payload GenerarPedidoDTO generarPedidoDTO) {
-    //log.info("Received DTO", generarPedidoDTO);
-    System.out.println("Received DTO: " + generarPedidoDTO.getPedido().getCliente().getNombreCompletoCliente());
+    log.info("Pedido ID: " + generarPedidoDTO.getPedido().getId() + " Cliente: "
+        + generarPedidoDTO.getPedido().getCliente().getNombreCompletoCliente());
     makeSlow();
   }
 
