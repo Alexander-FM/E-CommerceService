@@ -1,6 +1,8 @@
 package com.alexandertutoriales.service.ecommerce.service;
 
 import static com.alexandertutoriales.service.ecommerce.utils.Global.OPERACION_CORRECTA;
+import static com.alexandertutoriales.service.ecommerce.utils.Global.OPERACION_ERRONEA;
+import static com.alexandertutoriales.service.ecommerce.utils.Global.RPTA_ERROR;
 import static com.alexandertutoriales.service.ecommerce.utils.Global.RPTA_OK;
 import static com.alexandertutoriales.service.ecommerce.utils.Global.TIPO_DATA;
 
@@ -64,7 +66,11 @@ import org.springframework.util.StreamUtils;
 @Transactional
 public class PedidoService {
 
-  private static final String webSocket = "/topic/pedido-notification";
+  private static final String WebSocket = "/topic/pedido-notification";
+
+  private static final String MessageDTOIsNull = "El objeto GenerarPedidoDTO no puede ser nulo, intente nuevamente.";
+
+  private static final String MessageErrorGeneratedEncryptPDF = "El PDF no se ha generado correctamente o el password es nulo";
 
   private final PedidoRepository repository;
 
@@ -116,9 +122,7 @@ public class PedidoService {
   public GenericResponse<List<PedidoConDetallesDTO>> devolverMisCompras(int idCli) {
     final List<PedidoConDetallesDTO> dtos = new ArrayList<>();
     final Iterable<Pedido> pedidos = repository.devolverMisCompras(idCli);
-    pedidos.forEach(p -> {
-      dtos.add(new PedidoConDetallesDTO(p, detallePedidoRepository.findByPedido(p.getId())));
-    });
+    pedidos.forEach(p -> dtos.add(new PedidoConDetallesDTO(p, detallePedidoRepository.findByPedido(p.getId()))));
     return new GenericResponse(OPERACION_CORRECTA, RPTA_OK, "Petición encontrada", dtos);
   }
 
@@ -128,20 +132,26 @@ public class PedidoService {
    * @param dto the dto
    * @return the generic response
    */
-  public GenericResponse guardarPedido(GenerarPedidoDTO dto) {
-    log.info("Message '{}' will be send ... ", dto);
-    System.out.println("Message '{}' will be send" + dto.getPedido().getId());
-    this.publisher.send(dto);
-    this.repository.save(dto.getPedido());
-    for (DetallePedido dp : dto.getDetallePedido()) {
-      dp.setPedido(dto.getPedido());
-      this.platilloRepository.descontarStock(dp.getCantidad(), dp.getPlatillo().getId());
+  public GenericResponse<GenerarPedidoDTO> guardarPedido(GenerarPedidoDTO dto) {
+    try {
+      if (dto == null || dto.getPedido().getCliente() == null || dto.getDetallePedido() == null) {
+        throw new IllegalArgumentException(MessageDTOIsNull);
+      }
+      log.info("Message '{}' will be send ... ", dto);
+      this.publisher.send(dto);
+      this.repository.save(dto.getPedido());
+      for (DetallePedido dp : dto.getDetallePedido()) {
+        dp.setPedido(dto.getPedido());
+        this.platilloRepository.descontarStock(dp.getCantidad(), dp.getPlatillo().getId());
+      }
+      this.dpService.guardarDetalles(dto.getDetallePedido());
+      this.template.convertAndSend(WebSocket, dto);
+      ResponseEntity<Resource> reporte = exportInvoice(dto.getPedido().getCliente().getId(), dto.getPedido().getId());
+      sendInvoiceByEmail(dto.getPedido(), reporte);
+      return new GenericResponse<>(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
+    } catch (Exception e) {
+      return new GenericResponse<>(TIPO_DATA, RPTA_ERROR, OPERACION_ERRONEA, null);
     }
-    this.dpService.guardarDetalles(dto.getDetallePedido());
-    this.template.convertAndSend(webSocket, dto);
-    ResponseEntity<Resource> reporte = exportInvoice(dto.getPedido().getCliente().getId(), dto.getPedido().getId());
-    sendInvoiceByEmail(dto.getPedido(), reporte);
-    return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
   }
 
   /**
@@ -273,15 +283,23 @@ public class PedidoService {
    * @param pdfBytes the pedido
    * @param password the factura pdf
    */
-  private byte[] encryptPdf(byte[] pdfBytes, String password) throws Exception {
-    PdfReader reader = new PdfReader(pdfBytes);
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    PdfStamper stamper = new PdfStamper(reader, baos);
-    stamper.setEncryption(password.getBytes(), password.getBytes(),
-        PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128);
-    stamper.close();
-    reader.close();
-    return baos.toByteArray();
+  private byte[] encryptPdf(final byte[] pdfBytes, final String password) {
+    try {
+      if (pdfBytes == null || password == null) {
+        throw new IllegalArgumentException(MessageErrorGeneratedEncryptPDF);
+      }
+      PdfReader reader = new PdfReader(pdfBytes);
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      PdfStamper stamper = new PdfStamper(reader, baos);
+      stamper.setEncryption(password.getBytes(), password.getBytes(), PdfWriter.ALLOW_PRINTING, PdfWriter.ENCRYPTION_AES_128);
+      stamper.close();
+      reader.close();
+      return baos.toByteArray();
+    } catch (Exception e) {
+      log.error(MessageErrorGeneratedEncryptPDF, e);
+      return null;
+    }
+
   }
 
   /**
@@ -289,8 +307,8 @@ public class PedidoService {
    *
    * @param pedido the pedido
    */
-  private String buildCustomFileName(Pedido pedido) {
-    String idCompra = "C" + String.format("%04d", pedido.getId()); // Formato CXXX (donde XXX es el id de la compra)
+  private String buildCustomFileName(final Pedido pedido) {
+    String idCompra = "C" + String.format("%04d", pedido.getId()); // Formato CXXX (donde XXX es id de la compra)
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy-HH:mm:ss");
     String fechaCompra = dateFormat.format(pedido.getFechaCompra());
