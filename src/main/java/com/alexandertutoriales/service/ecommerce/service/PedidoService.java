@@ -66,11 +66,11 @@ import org.springframework.util.StreamUtils;
 @Transactional
 public class PedidoService {
 
-  private static final String WebSocket = "/topic/pedido-notification";
+  private static final String WEB_SOCKET = "/topic/pedido-notification";
 
-  private static final String MessageDTOIsNull = "El objeto GenerarPedidoDTO no puede ser nulo, intente nuevamente.";
+  private static final String MESSAGE_DTO_IS_NULL = "El objeto GenerarPedidoDTO no puede ser nulo, intente nuevamente.";
 
-  private static final String MessageErrorGeneratedEncryptPDF = "El PDF no se ha generado correctamente o el password es nulo";
+  private static final String MESSAGE_ERROR_GENERATED_ENCRYPTED_PDF = "El PDF no se ha generado correctamente o el password es nulo";
 
   private final PedidoRepository repository;
 
@@ -135,7 +135,7 @@ public class PedidoService {
   public GenericResponse<GenerarPedidoDTO> guardarPedido(GenerarPedidoDTO dto) {
     try {
       if (dto == null || dto.getPedido().getCliente() == null || dto.getDetallePedido() == null) {
-        throw new IllegalArgumentException(MessageDTOIsNull);
+        throw new IllegalArgumentException(MESSAGE_DTO_IS_NULL);
       }
       log.info("Message '{}' will be send ... ", dto);
       this.publisher.send(dto);
@@ -145,9 +145,9 @@ public class PedidoService {
         this.platilloRepository.descontarStock(dp.getCantidad(), dp.getPlatillo().getId());
       }
       this.dpService.guardarDetalles(dto.getDetallePedido());
-      this.template.convertAndSend(WebSocket, dto);
-      ResponseEntity<Resource> reporte = exportInvoice(dto.getPedido().getCliente().getId(), dto.getPedido().getId());
-      sendInvoiceByEmail(dto.getPedido(), reporte);
+      this.template.convertAndSend(WEB_SOCKET, dto);
+      // ResponseEntity<Resource> reporte = exportInvoice(dto.getPedido().getCliente().getId(), dto.getPedido().getId());
+      // sendInvoiceByEmail(dto.getPedido(), reporte);
       return new GenericResponse<>(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
     } catch (Exception e) {
       return new GenericResponse<>(TIPO_DATA, RPTA_ERROR, OPERACION_ERRONEA, null);
@@ -286,7 +286,7 @@ public class PedidoService {
   private byte[] encryptPdf(final byte[] pdfBytes, final String password) {
     try {
       if (pdfBytes == null || password == null) {
-        throw new IllegalArgumentException(MessageErrorGeneratedEncryptPDF);
+        throw new IllegalArgumentException(MESSAGE_ERROR_GENERATED_ENCRYPTED_PDF);
       }
       PdfReader reader = new PdfReader(pdfBytes);
       ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -296,7 +296,7 @@ public class PedidoService {
       reader.close();
       return baos.toByteArray();
     } catch (Exception e) {
-      log.error(MessageErrorGeneratedEncryptPDF, e);
+      log.error(MESSAGE_ERROR_GENERATED_ENCRYPTED_PDF, e);
       return null;
     }
 
