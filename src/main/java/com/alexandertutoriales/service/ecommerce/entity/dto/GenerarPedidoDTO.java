@@ -2,7 +2,6 @@ package com.alexandertutoriales.service.ecommerce.entity.dto;
 
 import java.io.Serializable;
 
-import com.alexandertutoriales.service.ecommerce.entity.Cliente;
 import com.alexandertutoriales.service.ecommerce.entity.DetallePedido;
 import com.alexandertutoriales.service.ecommerce.entity.Pedido;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,8 +12,6 @@ public class GenerarPedidoDTO implements Serializable {
 
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Iterable<DetallePedido> detallePedido;
-
-  private Cliente cliente;
 
   public GenerarPedidoDTO() {
   }
@@ -33,13 +30,5 @@ public class GenerarPedidoDTO implements Serializable {
 
   public void setDetallePedido(Iterable<DetallePedido> detallePedido) {
     this.detallePedido = detallePedido;
-  }
-
-  public Cliente getCliente() {
-    return cliente;
-  }
-
-  public void setCliente(Cliente cliente) {
-    this.cliente = cliente;
   }
 }

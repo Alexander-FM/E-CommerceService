@@ -64,6 +64,8 @@ import org.springframework.util.StreamUtils;
 @Transactional
 public class PedidoService {
 
+  private static final String webSocket = "/topic/pedido-notification";
+
   private final PedidoRepository repository;
 
   private final DetallePedidoRepository detallePedidoRepository;
@@ -83,18 +85,18 @@ public class PedidoService {
   /**
    * Instantiates a new Pedido service.
    *
-   * @param repository the repository.
+   * @param repository              the repository.
    * @param detallePedidoRepository the detalle pedido repository.
-   * @param dpService the dp service.
-   * @param platilloRepository the platillo repository.
-   * @param template the template.
-   * @param javaMailSender the java mail sender.
-   * @param usuarioRepository the usuario repository.
-   * @param publisher the publisher.
+   * @param dpService               the dp service.
+   * @param platilloRepository      the platillo repository.
+   * @param template                the template.
+   * @param javaMailSender          the java mail sender.
+   * @param usuarioRepository       the usuario repository.
+   * @param publisher               the publisher.
    */
   public PedidoService(PedidoRepository repository, DetallePedidoRepository detallePedidoRepository, DetallePedidoService dpService,
-      PlatilloRepository platilloRepository, SimpMessagingTemplate template, JavaMailSender javaMailSender,
-      UsuarioRepository usuarioRepository, Publisher publisher) {
+                       PlatilloRepository platilloRepository, SimpMessagingTemplate template, JavaMailSender javaMailSender,
+                       UsuarioRepository usuarioRepository, Publisher publisher) {
     this.repository = repository;
     this.detallePedidoRepository = detallePedidoRepository;
     this.dpService = dpService;
@@ -127,23 +129,18 @@ public class PedidoService {
    * @return the generic response
    */
   public GenericResponse guardarPedido(GenerarPedidoDTO dto) {
-    Date date = new Date();
-    dto.getPedido().setFechaCompra(new java.sql.Date(date.getTime()));
-    dto.getPedido().setAnularPedido(false);
-    dto.getPedido().setMonto(dto.getPedido().getMonto());
-    dto.getPedido().setCliente(dto.getCliente());
-    //log.info("Message '{}' will be send ... ", dto);
-    System.out.println("Message '{}' will be send" + dto);
+    log.info("Message '{}' will be send ... ", dto);
+    System.out.println("Message '{}' will be send" + dto.getPedido().getId());
     this.publisher.send(dto);
-    final Pedido pedidoGuardado = this.repository.save(dto.getPedido());
+    this.repository.save(dto.getPedido());
     for (DetallePedido dp : dto.getDetallePedido()) {
       dp.setPedido(dto.getPedido());
       this.platilloRepository.descontarStock(dp.getCantidad(), dp.getPlatillo().getId());
     }
     this.dpService.guardarDetalles(dto.getDetallePedido());
-    this.template.convertAndSend("/topic/pedido-notification", dto);
-    ResponseEntity<Resource> reporte = exportInvoice(pedidoGuardado.getCliente().getId(), pedidoGuardado.getId());
-    sendInvoiceByEmail(pedidoGuardado, reporte);
+    this.template.convertAndSend(webSocket, dto);
+    ResponseEntity<Resource> reporte = exportInvoice(dto.getPedido().getCliente().getId(), dto.getPedido().getId());
+    sendInvoiceByEmail(dto.getPedido(), reporte);
     return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
   }
 
@@ -180,7 +177,7 @@ public class PedidoService {
   /**
    * Exportar reporte.
    *
-   * @param idCli the id cli
+   * @param idCli   the id cli
    * @param idOrden the id orden
    * @return the response entity
    */
@@ -215,7 +212,7 @@ public class PedidoService {
             .filename(var1.append(pedido.getId()).append("generatedate:").append(sdf).append(".pdf").toString()).build();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDisposition(contentDisposition);
-        return ResponseEntity.ok().contentLength((long) reporte.length).contentType(MediaType.APPLICATION_PDF).headers(headers)
+        return ResponseEntity.ok().contentLength(reporte.length).contentType(MediaType.APPLICATION_PDF).headers(headers)
             .body(new ByteArrayResource(reporte));
       } catch (Exception e) {
         e.printStackTrace();
@@ -229,7 +226,7 @@ public class PedidoService {
   /**
    * Calcular porcentaje.
    *
-   * @param precio the precio
+   * @param precio     the precio
    * @param porcentaje the porcentaje
    * @return the double
    */
@@ -240,7 +237,7 @@ public class PedidoService {
   /**
    * Enviar reporte por correo.
    *
-   * @param pedido the pedido
+   * @param pedido     the pedido
    * @param facturaPDF the factura pdf
    */
   private void sendInvoiceByEmail(Pedido pedido, ResponseEntity<Resource> facturaPDF) {

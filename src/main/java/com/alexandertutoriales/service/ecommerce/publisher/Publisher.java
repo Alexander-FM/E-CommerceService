@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 public class Publisher {
 
   /**
-   * The rabbit template
+   * The rabbit template.
    */
   private final RabbitTemplate rabbitTemplate;
 
   /**
-   * The Queue
+   * The Queue.
    */
   private final Queue queue;
 

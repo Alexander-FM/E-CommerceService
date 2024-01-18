@@ -12,19 +12,19 @@ public class Consumer {
 
   /**
    * Permite pasar una coleccion de colas que son todas aquellas colas que nuestro consumidor estará escuchando en RabbitMQ. De momento solo
-   * tenemos una cola en nuestro application.propiertes
+   * tenemos una cola en nuestro application.propiertes.
    *
-   * @param generarPedidoDTO el generar pedido dto
+   * @param generarPedidoDTO el generar pedido dto.
    */
   @RabbitListener(queues = {"${ecommerce.queue.name}"})
   public void receive(@Payload GenerarPedidoDTO generarPedidoDTO) {
     //log.info("Received DTO", generarPedidoDTO);
-    System.out.println("Received DTO: " + generarPedidoDTO);
+    System.out.println("Received DTO: " + generarPedidoDTO.getPedido().getCliente().getNombreCompletoCliente());
     makeSlow();
   }
 
   /**
-   *
+   * Ejecutar cada 5 milisegundos.
    */
   private void makeSlow() {
     try {
