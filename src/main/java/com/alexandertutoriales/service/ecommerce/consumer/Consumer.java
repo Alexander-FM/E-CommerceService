@@ -17,7 +17,7 @@ public class Consumer {
    */
   @RabbitListener(queues = {"${ecommerce.queue.name}"})
   public void receive(@Payload GenerarPedidoDTO generarPedidoDTO) {
-    log.info("Pedido ID: " + generarPedidoDTO.getPedido().getId() + " Cliente: "
+    log.info("Pedido ID '{}' : ", generarPedidoDTO.getPedido().getId() + " Cliente ID '{}' : "
         + generarPedidoDTO.getPedido().getCliente().getNombreCompletoCliente());
     makeSlow();
   }
