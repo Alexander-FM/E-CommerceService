@@ -144,6 +144,9 @@ public class PedidoService {
       boolean hayStockSuficiente = false;
       for (DetallePedido dp : dto.getDetallePedido()) {
         hayStockSuficiente = this.platilloRepository.hayStockSuficiente(dp.getCantidad(), dp.getPlatillo().getId());
+        if (!hayStockSuficiente) {
+          return new GenericResponse(TIPO_DATA, RPTA_WARNING, OPERACION_INCORRECTA, new ErrorResponse(STOCK_INSUFICIENTE));
+        }
       }
       if (hayStockSuficiente) {
         log.info("Message '{}' will be send ... ", dto.getPedido().getCliente().getNombreCompletoCliente());
