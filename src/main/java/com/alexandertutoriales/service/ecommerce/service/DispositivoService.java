@@ -17,26 +17,33 @@ import com.alexandertutoriales.service.ecommerce.entity.Dispositivo;
 import com.alexandertutoriales.service.ecommerce.repository.DispositivoRepository;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
 import com.alexandertutoriales.service.ecommerce.utils.SendNotification;
+import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
 public class DispositivoService {
-
-  private final DispositivoRepository repository;
-
   private static final String FCM_APIKEY =
       "AAAAcx-D8LU:APA91bF_OGWRo1MYE57GgYqF4WSTNePIy_NMSLnDomycLj4"
           + "-bnhTa0KnwedSRBblYZ50z0dbL3miMvsobHe45jwksubI43feJ3BZ2Es8l0U6As0QJArTFnWDqtmtzeMAwFfjqVqZk1zh";
 
   private static final String URL = "https://fcm.googleapis.com/fcm/send";
 
+  private final DispositivoRepository repository;
+
   public DispositivoService(DispositivoRepository repository) {
     this.repository = repository;
   }
 
+  @Transactional
   public GenericResponse<Dispositivo> registerDevice(Dispositivo dispositivo) {
-    return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA,
-        this.repository.save(dispositivo));
+    Dispositivo device = this.repository.existDeviceId(dispositivo.getDeviceId());
+    if (device != null) {
+      return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, device);
+    } else {
+      return new GenericResponse(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA,
+          this.repository.save(dispositivo));
+    }
+
   }
 
   public GenericResponse sendNotification(SendNotification notification, int deviceID) throws MalformedURLException {
