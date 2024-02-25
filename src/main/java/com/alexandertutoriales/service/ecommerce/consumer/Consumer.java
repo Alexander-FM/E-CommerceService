@@ -23,7 +23,7 @@ public class Consumer {
   }
 
   /**
-   * Ejecutar cada 1.5 minutos.
+   * Ejecutar cada 15 segundos.
    */
   private void makeSlow() {
     try {
