@@ -11,7 +11,7 @@ import static com.alexandertutoriales.service.ecommerce.utils.Global.TIPO_DATA;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
+import java.nio.file.Files;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import com.alexandertutoriales.service.ecommerce.entity.Pedido;
 import com.alexandertutoriales.service.ecommerce.entity.Usuario;
 import com.alexandertutoriales.service.ecommerce.entity.dto.GenerarPedidoDTO;
 import com.alexandertutoriales.service.ecommerce.entity.dto.PedidoConDetallesDTO;
-import com.alexandertutoriales.service.ecommerce.publisher.Publisher;
+import com.alexandertutoriales.service.ecommerce.publisher.pedidos.PublisherPedidos;
 import com.alexandertutoriales.service.ecommerce.repository.DetallePedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PlatilloRepository;
@@ -69,7 +69,6 @@ import org.springframework.util.StreamUtils;
 @Service
 @Transactional
 public class PedidoService {
-
   private static final String WEB_SOCKET = "/topic/pedido-notification";
 
   private static final String MESSAGE_DTO_IS_NULL = "El objeto GenerarPedidoDTO no puede ser nulo, intente nuevamente.";
@@ -90,7 +89,7 @@ public class PedidoService {
 
   private final UsuarioRepository usuarioRepository;
 
-  private final Publisher publisher;
+  private final PublisherPedidos publisherPedidos;
 
   /**
    * Instantiates a new Pedido service.
@@ -102,11 +101,11 @@ public class PedidoService {
    * @param template                the template.
    * @param javaMailSender          the java mail sender.
    * @param usuarioRepository       the usuario repository.
-   * @param publisher               the publisher.
+   * @param publisherPedidos        the publisher.
    */
   public PedidoService(PedidoRepository repository, DetallePedidoRepository detallePedidoRepository, DetallePedidoService dpService,
                        PlatilloRepository platilloRepository, SimpMessagingTemplate template, JavaMailSender javaMailSender,
-                       UsuarioRepository usuarioRepository, Publisher publisher) {
+                       UsuarioRepository usuarioRepository, PublisherPedidos publisherPedidos) {
     this.repository = repository;
     this.detallePedidoRepository = detallePedidoRepository;
     this.dpService = dpService;
@@ -114,7 +113,7 @@ public class PedidoService {
     this.template = template;
     this.javaMailSender = javaMailSender;
     this.usuarioRepository = usuarioRepository;
-    this.publisher = publisher;
+    this.publisherPedidos = publisherPedidos;
   }
 
   /**
@@ -150,7 +149,7 @@ public class PedidoService {
       }
       if (hayStockSuficiente) {
         log.info("Message '{}' will be send ... ", dto.getPedido().getCliente().getNombreCompletoCliente());
-        this.publisher.send(dto);
+        this.publisherPedidos.send(dto);
         this.repository.save(dto.getPedido());
         for (DetallePedido dp : dto.getDetallePedido()) {
           dp.setPedido(dto.getPedido());
@@ -158,8 +157,8 @@ public class PedidoService {
         }
         this.dpService.guardarDetalles(dto.getDetallePedido());
         this.template.convertAndSend(WEB_SOCKET, dto);
-        // ResponseEntity<Resource> reporte = exportInvoice(dto.getPedido().getCliente().getId(), dto.getPedido().getId());
-        // sendInvoiceByEmail(dto.getPedido(), reporte);
+        ResponseEntity<Resource> reporte = exportInvoice(dto.getPedido().getCliente().getId(), dto.getPedido().getId());
+        sendInvoiceByEmail(dto.getPedido(), reporte);
         return new GenericResponse<>(TIPO_DATA, RPTA_OK, OPERACION_CORRECTA, dto);
       } else {
         return new GenericResponse(TIPO_DATA, RPTA_WARNING, OPERACION_INCORRECTA, new ErrorResponse(STOCK_INSUFICIENTE));
@@ -224,7 +223,7 @@ public class PedidoService {
         String formattedIGV = currencyFormatter.format(igv);
         final HashMap<String, Object> parameters = new HashMap<>();
         parameters.put("nombreCliente", pedido.getCliente().getNombreCompletoCliente());
-        parameters.put("imgLogo", new FileInputStream(imgLogo));
+        parameters.put("imgLogo", Files.newInputStream(imgLogo.toPath()));
         parameters.put("total", formattedTotal);
         parameters.put("igv", formattedIGV);
         parameters.put("dsInvoice", new JRBeanCollectionDataSource((Collection<?>) this.detallePedidoRepository.findByPedido(idOrden)));
@@ -283,7 +282,7 @@ public class PedidoService {
         byte[] pdfBytes = StreamUtils.copyToByteArray(Objects.requireNonNull(facturaPDF.getBody()).getInputStream());
         String dni = pedido.getCliente().getNumDoc();
         String nombreArchivo = buildCustomFileName(pedido);
-        helper.addAttachment(nombreArchivo, new ByteArrayResource(encryptPdf(pdfBytes, dni)));
+        helper.addAttachment(nombreArchivo, new ByteArrayResource(Objects.requireNonNull(encryptPdf(pdfBytes, dni))));
       }
       javaMailSender.send(message);
     } catch (Exception e) {

@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/categoria")
 public class CategoriaController {
-
   private final CategoriaService service;
 
   public CategoriaController(CategoriaService service) {
@@ -36,7 +36,7 @@ public class CategoriaController {
 
   @PostMapping("/filtrar")
   public ResponseEntity<Page<CategoriaDto>> filtrar(Pageable pageRequest,
-      @Valid @RequestBody(required = false) CategoriaFilter filter) {
+                                                    @Valid @RequestBody(required = false) CategoriaFilter filter) {
     return ResponseEntity.ok(this.service.findAll(pageRequest, filter));
   }
 
@@ -59,7 +59,7 @@ public class CategoriaController {
 
   @PutMapping(value = "/{categoriaInfo}")
   public ResponseEntity<Integer> update(@PathVariable(value = "categoriaInfo", required = true) Integer id,
-      @Valid @RequestBody CategoriaDto categoriaDto) {
+                                        @Valid @RequestBody CategoriaDto categoriaDto) {
     categoriaDto.setId(id);
     Integer categoriaId = this.service.save(categoriaDto);
     return ResponseEntity.ok(categoriaId);
@@ -84,5 +84,11 @@ public class CategoriaController {
   public ResponseEntity<Void> activar(@PathVariable(required = false) Integer id) {
     this.service.activar(id);
     return ResponseEntity.ok().build();
+  }
+
+  @PostMapping("/postQueue")
+  public ResponseEntity<String> postQueue(@Valid @RequestParam String message) {
+    this.service.postQueue(message);
+    return ResponseEntity.ok("{\"success\": \"Mensaje enviado a la cola-nttdata\"}");
   }
 }

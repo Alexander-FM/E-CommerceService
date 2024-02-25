@@ -11,6 +11,7 @@ import com.alexandertutoriales.service.ecommerce.entity.Categoria;
 import com.alexandertutoriales.service.ecommerce.entity.dto.CategoriaDto;
 import com.alexandertutoriales.service.ecommerce.entity.filters.CategoriaFilter;
 import com.alexandertutoriales.service.ecommerce.mapper.CategoriaMapper;
+import com.alexandertutoriales.service.ecommerce.publisher.categoria.PublisherCategoria;
 import com.alexandertutoriales.service.ecommerce.repository.CategoriaRepository;
 import com.alexandertutoriales.service.ecommerce.spec.CategoriaSpec;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
@@ -26,17 +27,19 @@ import org.springframework.stereotype.Service;
 @Service
 @Transactional
 public class CategoriaService {
-
   private final CategoriaRepository repository;
 
   private final CategoriaSpec spec;
 
   private final CategoriaMapper mapper;
 
-  public CategoriaService(CategoriaRepository repository, CategoriaSpec spec, CategoriaMapper mapper) {
+  private final PublisherCategoria publisherCategoria;
+
+  public CategoriaService(CategoriaRepository repository, CategoriaSpec spec, CategoriaMapper mapper, PublisherCategoria publisherCategoria) {
     this.repository = repository;
     this.spec = spec;
     this.mapper = mapper;
+    this.publisherCategoria = publisherCategoria;
   }
 
   public GenericResponse listarCategoriasActivas() {
@@ -47,7 +50,7 @@ public class CategoriaService {
   /**
    * Recupera una página de objetos CategoriaDto con filtrado opcional.
    *
-   * @param page La información de paginación y ordenación.
+   * @param page   La información de paginación y ordenación.
    * @param filter El filtro opcional para aplicar a la consulta.
    * @return Una página de objetos CategoriaDto que cumplen con los criterios de filtro y orden.
    */
@@ -105,4 +108,7 @@ public class CategoriaService {
     repository.desactivar(id);
   }
 
+  public void postQueue(String message) {
+    this.publisherCategoria.sendMessageNttDataQueue(message);
+  }
 }
