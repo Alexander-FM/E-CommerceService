@@ -15,6 +15,11 @@ public class PublisherCategoriaConfig {
   @Value("${nttdata.queue.name}")
   private String nttdataQueue;
 
+  /**
+   * Configuración de la cola que será utilizada para publicar mensajes.
+   *
+   * @return Objeto Queue que representa la cola configurada.
+   */
   @Bean
   public Queue nttdataQueue() {
     return new Queue(nttdataQueue, true);
