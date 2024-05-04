@@ -11,7 +11,6 @@ import com.alexandertutoriales.service.ecommerce.entity.Categoria;
 import com.alexandertutoriales.service.ecommerce.entity.dto.CategoriaDto;
 import com.alexandertutoriales.service.ecommerce.entity.filters.CategoriaFilter;
 import com.alexandertutoriales.service.ecommerce.mapper.CategoriaMapper;
-import com.alexandertutoriales.service.ecommerce.publisher.categoria.PublisherCategoria;
 import com.alexandertutoriales.service.ecommerce.repository.CategoriaRepository;
 import com.alexandertutoriales.service.ecommerce.spec.CategoriaSpec;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
@@ -33,13 +32,10 @@ public class CategoriaService {
 
   private final CategoriaMapper mapper;
 
-  private final PublisherCategoria publisherCategoria;
-
-  public CategoriaService(CategoriaRepository repository, CategoriaSpec spec, CategoriaMapper mapper, PublisherCategoria publisherCategoria) {
+  public CategoriaService(CategoriaRepository repository, CategoriaSpec spec, CategoriaMapper mapper) {
     this.repository = repository;
     this.spec = spec;
     this.mapper = mapper;
-    this.publisherCategoria = publisherCategoria;
   }
 
   public GenericResponse listarCategoriasActivas() {
@@ -106,9 +102,5 @@ public class CategoriaService {
 
   public void desactivar(Integer id) {
     repository.desactivar(id);
-  }
-
-  public void postQueue(String message) {
-    this.publisherCategoria.sendMessageNttDataQueue(message);
   }
 }

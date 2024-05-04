@@ -28,7 +28,6 @@ import com.alexandertutoriales.service.ecommerce.entity.Pedido;
 import com.alexandertutoriales.service.ecommerce.entity.Usuario;
 import com.alexandertutoriales.service.ecommerce.entity.dto.GenerarPedidoDTO;
 import com.alexandertutoriales.service.ecommerce.entity.dto.PedidoConDetallesDTO;
-import com.alexandertutoriales.service.ecommerce.publisher.pedidos.PublisherPedidos;
 import com.alexandertutoriales.service.ecommerce.repository.DetallePedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PedidoRepository;
 import com.alexandertutoriales.service.ecommerce.repository.PlatilloRepository;
@@ -89,8 +88,6 @@ public class PedidoService {
 
   private final UsuarioRepository usuarioRepository;
 
-  private final PublisherPedidos publisherPedidos;
-
   /**
    * Instantiates a new Pedido service.
    *
@@ -101,11 +98,10 @@ public class PedidoService {
    * @param template                the template.
    * @param javaMailSender          the java mail sender.
    * @param usuarioRepository       the usuario repository.
-   * @param publisherPedidos        the publisher.
    */
   public PedidoService(PedidoRepository repository, DetallePedidoRepository detallePedidoRepository, DetallePedidoService dpService,
                        PlatilloRepository platilloRepository, SimpMessagingTemplate template, JavaMailSender javaMailSender,
-                       UsuarioRepository usuarioRepository, PublisherPedidos publisherPedidos) {
+                       UsuarioRepository usuarioRepository) {
     this.repository = repository;
     this.detallePedidoRepository = detallePedidoRepository;
     this.dpService = dpService;
@@ -113,7 +109,6 @@ public class PedidoService {
     this.template = template;
     this.javaMailSender = javaMailSender;
     this.usuarioRepository = usuarioRepository;
-    this.publisherPedidos = publisherPedidos;
   }
 
   /**
@@ -149,7 +144,6 @@ public class PedidoService {
       }
       if (hayStockSuficiente) {
         log.info("Message '{}' will be send ... ", dto.getPedido().getCliente().getNombreCompletoCliente());
-        this.publisherPedidos.send(dto);
         this.repository.save(dto.getPedido());
         for (DetallePedido dp : dto.getDetallePedido()) {
           dp.setPedido(dto.getPedido());
