@@ -9,8 +9,10 @@ import static com.alexandertutoriales.service.ecommerce.utils.Global.RPTA_WARNIN
 import static com.alexandertutoriales.service.ecommerce.utils.Global.STOCK_INSUFICIENTE;
 import static com.alexandertutoriales.service.ecommerce.utils.Global.TIPO_DATA;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -20,6 +22,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -34,6 +37,13 @@ import com.alexandertutoriales.service.ecommerce.repository.PlatilloRepository;
 import com.alexandertutoriales.service.ecommerce.repository.UsuarioRepository;
 import com.alexandertutoriales.service.ecommerce.utils.ErrorResponse;
 import com.alexandertutoriales.service.ecommerce.utils.GenericResponse;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.lowagie.text.pdf.PdfReader;
 import com.lowagie.text.pdf.PdfStamper;
 import com.lowagie.text.pdf.PdfWriter;
@@ -206,9 +216,12 @@ public class PedidoService {
     Double igv = calcularPorcentaje(total, 18);
     if (optPedido.isPresent()) {
       try {
+        final String qrContent = "ID Venta: " + idOrden + "\nMonto a Pagar: " + total;
+        final byte[] qrCodeBytes = generateQRCode(qrContent);
+        final ByteArrayInputStream qrInputStream = new ByteArrayInputStream(qrCodeBytes);
         final Pedido pedido = optPedido.get();
         final File file = ResourceUtils.getFile("classpath:exportInvoice.jasper");
-        final File imgLogo = ResourceUtils.getFile("classpath:images/logoBisuteria.png");
+        final File imgLogo = ResourceUtils.getFile("classpath:images/logoArcangel.png");
         final JasperReport report = (JasperReport) JRLoader.loadObject(file);
 
         Locale locale = new Locale("es", "PE"); // Especifica el idioma y país según tu preferencia
@@ -220,6 +233,14 @@ public class PedidoService {
         parameters.put("imgLogo", Files.newInputStream(imgLogo.toPath()));
         parameters.put("total", formattedTotal);
         parameters.put("igv", formattedIGV);
+        parameters.put("imgQR", qrInputStream);
+        parameters.put("nombreNegocio", "Boticas Arcangel");
+        parameters.put("direccionNegocio", "Prol. Sucre 903 U.V \"Casimiro Chuman\" Ferreñafe, Ferreñafe, Lambayeque - 14311");
+        parameters.put("rucNegocio", "20963258741");
+        parameters.put("telefonoNegocio", "987456159");
+        parameters.put("documentoCliente", pedido.getCliente().getTipoDoc() + " - " + pedido.getCliente().getNumDoc());
+        parameters.put("descripcionFooter", "Atención: Esta es una representación grafica de un pedido ordenado del app Boticas Arcangel. "
+            + "Para más información visite el siguiente enlace: https://boticasperu.pe/");
         parameters.put("dsInvoice", new JRBeanCollectionDataSource((Collection<?>) this.detallePedidoRepository.findByPedido(idOrden)));
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters, new JREmptyDataSource());
@@ -323,5 +344,30 @@ public class PedidoService {
 
     // Construir el nombre del archivo PDF
     return "factura" + idCompra + "_" + fechaCompra + ".pdf";
+  }
+
+  /**
+   * Método para generar un código QR a partir de un contenido dado.
+   *
+   * @param content El contenido que se desea codificar en el código QR.
+   * @return Un arreglo de bytes que representa la imagen del código QR generado.
+   * @throws WriterException Sí ocurre un error durante la generación del código QR.
+   * @throws IOException     Sí ocurre un error de entrada/salida al escribir el código QR en bytes.
+   */
+  private byte[] generateQRCode(final String content) throws WriterException, IOException {
+    final int width = 150;
+    final int height = 150;
+    final String format = "png";
+
+    final Map<EncodeHintType, Object> hints = new HashMap<>();
+    hints.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+    hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+    hints.put(EncodeHintType.MARGIN, 1);
+    final QRCodeWriter qrCodeWriter = new QRCodeWriter();
+    final BitMatrix bitMatrix = qrCodeWriter.encode(content, BarcodeFormat.QR_CODE, width, height, hints);
+
+    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    MatrixToImageWriter.writeToStream(bitMatrix, format, outputStream);
+    return outputStream.toByteArray();
   }
 }
